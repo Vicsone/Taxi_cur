@@ -45,7 +45,7 @@ namespace Taxi
                 while (reader.Read())
                 {
                     Drive drive = new Drive();
-                    drive.DriveId = reader.GetInt32(reader.GetOrdinal("Id"));
+                    drive.Id = reader.GetInt32(reader.GetOrdinal("Id"));
                     drive.StasusId = reader.GetInt32(reader.GetOrdinal("StatusId"));
                     drive.DriverId = reader.GetInt32(reader.GetOrdinal("driverid"));
                     drive.RequestId = reader.GetInt32(reader.GetOrdinal("requestid"));

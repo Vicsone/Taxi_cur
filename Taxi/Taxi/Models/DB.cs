@@ -8,14 +8,15 @@ namespace Taxi
     {
         public DB()
         {
-            StatusList = GetStatusList();
             Users = GetUsers();
-            Requests = GetRequests();
+            Drivers = GetDrivers();
+            StatusList = GetStatusList();
+            // Requests = GetRequests();
         }
 
         public static DB _dB = new DB();
 
-        public string connectionString = @"Data Source=DESKTOP-OE4PBCI\SQLEXPRESS;Initial Catalog=SecurityCompany2;Integrated Security=True";
+        public string connectionString = @"Data Source=DESKTOP-OE4PBCI\SQLEXPRESS;Initial Catalog=Taxi;Integrated Security=True";
 
         public List<Request> Requests;
         public List<Client> Clients;
@@ -59,63 +60,24 @@ namespace Taxi
             return list;
         }
         
-
-        private List<Request> GetRequests()
+        private List<Driver> GetDrivers()
         {
-            List<Request> list = new List<Request>();
+            List<Driver> list = new List<Driver>();
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                string query = $"select * from [Request]";
+                string query = $"select * from [Driver]";
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     SqlDataReader reader = command.ExecuteReader();
                     while (reader.Read())
                     {
-                        Request item = new Request();
-                        item.Id = Convert.ToInt32(reader["Id"]);
-                        item.Address = reader["Address"].ToString()!;
-                        item.StatusId = Convert.ToInt32(reader["StatusId"]);
-                        item.ClientId = Convert.ToInt32(reader["ClientId"]);
-                        if (reader["EmployeeId"] != DBNull.Value)
-                        {
-                            item.EmployeeId = Convert.ToInt32(reader["EmployeeId"]);
-                            item.Employee = Users.Find(c => c.Id == Convert.ToInt32(reader["EmployeeId"]));
-                        }
-
-                        item.Status = StatusList.Find(c => c.Id == Convert.ToInt32(reader["StatusId"]))!;
-                        item.Client = Users.Find(c => c.Id == Convert.ToInt32(reader["ClientId"]))!;
-                        list.Add(item);
-                    }
-
-                    reader.Close();
-                }
-
-                connection.Close();
-            }
-
-            return list;
-        }
-
-        private List<RequestService> GetRequestServices()
-        {
-            List<RequestService> list = new List<RequestService>();
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                string query = $"select * from [RequestService]";
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    SqlDataReader reader = command.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        RequestService item = new RequestService()
+                        Driver item = new Driver()
                         {
                             Id = Convert.ToInt32(reader["Id"]),
-                            RequestId = Convert.ToInt32(reader["RequestId"]),
-                            ServiceId = Convert.ToInt32(reader["ServiceId"]),
-                            Request = Requests.Find(c => c.Id == Convert.ToInt32(reader["RequestId"]))!,
-                            Service = Services.Find(c => c.Id == Convert.ToInt32(reader["ServiceId"]))!
+                            Experience = Convert.ToInt32(reader["Experience"]),
+                            Rating = Convert.ToDecimal(reader["Rating"]),
+                            User = Users.Find(c=>c.Id == Convert.ToInt32(reader["Id"]))
                         };
                         list.Add(item);
                     }
@@ -128,6 +90,76 @@ namespace Taxi
 
             return list;
         }
+        
+
+        // private List<Request> GetRequests()
+        // {
+        //     List<Request> list = new List<Request>();
+        //     using (SqlConnection connection = new SqlConnection(connectionString))
+        //     {
+        //         connection.Open();
+        //         string query = $"select * from [Request]";
+        //         using (SqlCommand command = new SqlCommand(query, connection))
+        //         {
+        //             SqlDataReader reader = command.ExecuteReader();
+        //             while (reader.Read())
+        //             {
+        //                 Request item = new Request();
+        //                 item.Id = Convert.ToInt32(reader["Id"]);
+        //                 item.Address = reader["Address"].ToString()!;
+        //                 item.StatusId = Convert.ToInt32(reader["StatusId"]);
+        //                 item.ClientId = Convert.ToInt32(reader["ClientId"]);
+        //                 if (reader["EmployeeId"] != DBNull.Value)
+        //                 {
+        //                     item.EmployeeId = Convert.ToInt32(reader["EmployeeId"]);
+        //                     item.Employee = Users.Find(c => c.Id == Convert.ToInt32(reader["EmployeeId"]));
+        //                 }
+        //
+        //                 item.Status = StatusList.Find(c => c.Id == Convert.ToInt32(reader["StatusId"]))!;
+        //                 item.Client = Users.Find(c => c.Id == Convert.ToInt32(reader["ClientId"]))!;
+        //                 list.Add(item);
+        //             }
+        //
+        //             reader.Close();
+        //         }
+        //
+        //         connection.Close();
+        //     }
+        //
+        //     return list;
+        // }
+
+        // private List<RequestService> GetRequestServices()
+        // {
+        //     List<RequestService> list = new List<RequestService>();
+        //     using (SqlConnection connection = new SqlConnection(connectionString))
+        //     {
+        //         connection.Open();
+        //         string query = $"select * from [RequestService]";
+        //         using (SqlCommand command = new SqlCommand(query, connection))
+        //         {
+        //             SqlDataReader reader = command.ExecuteReader();
+        //             while (reader.Read())
+        //             {
+        //                 RequestService item = new RequestService()
+        //                 {
+        //                     Id = Convert.ToInt32(reader["Id"]),
+        //                     RequestId = Convert.ToInt32(reader["RequestId"]),
+        //                     ServiceId = Convert.ToInt32(reader["ServiceId"]),
+        //                     Request = Requests.Find(c => c.Id == Convert.ToInt32(reader["RequestId"]))!,
+        //                     Service = Services.Find(c => c.Id == Convert.ToInt32(reader["ServiceId"]))!
+        //                 };
+        //                 list.Add(item);
+        //             }
+        //
+        //             reader.Close();
+        //         }
+        //
+        //         connection.Close();
+        //     }
+        //
+        //     return list;
+        // }
 
         private List<Status> GetStatusList()
         {
@@ -144,7 +176,7 @@ namespace Taxi
                         Status item = new Status()
                         {
                             Id = Convert.ToInt32(reader["Id"]),
-                            Name = reader["Name"].ToString()!
+                            Name = reader["Name"].ToString()
                         };
                         list.Add(item);
                     }
