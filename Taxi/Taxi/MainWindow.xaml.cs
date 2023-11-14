@@ -23,7 +23,15 @@ namespace Taxi
         public MainWindow()
         {
             InitializeComponent();
-            Main.Content = new MainWin();
+            Main.Content = new Auth();
+        }
+
+        private void BackButton_OnClick(object sender, RoutedEventArgs e) => Main.GoBack();
+
+        private void Main_OnNavigated(object sender, NavigationEventArgs e)
+        {
+            if (Main.CanGoBack) BackButton.Visibility = Visibility.Visible;
+            else BackButton.Visibility = Visibility.Hidden;
         }
     }
 }

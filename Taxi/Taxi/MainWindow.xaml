@@ -5,8 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Taxi"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Taxi" Height="450" Width="800">
     <Grid>
-        <Frame Name="Main" NavigationUIVisibility="Hidden"></Frame>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="{Binding ElementName=Main,Path=Content.Title}" Margin="5" FontSize="24" HorizontalAlignment="Center" />
+        <Button Grid.Row="0" x:Name="BackButton" Click="BackButton_OnClick" Content="Назад" Width="100" Height="25" Margin="10" HorizontalAlignment="Right" />
+        <Frame Grid.Row="1" Name="Main" NavigationUIVisibility="Hidden" Navigated="Main_OnNavigated" />
     </Grid>
 </Window>

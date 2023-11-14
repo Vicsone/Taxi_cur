@@ -35,8 +35,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.SqlClient, Version=4.6.1.5, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SqlClient.4.8.5\lib\net461\System.Data.SqlClient.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -51,76 +55,77 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
-    <Compile Include="Add_Driver_Foe_Order.xaml.cs">
-      <DependentUpon>Add_Driver_Foe_Order.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Add_Order.xaml.cs">
-      <DependentUpon>Add_Order.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Change_Order.xaml.cs">
-      <DependentUpon>Change_Order.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Drive.cs" />
-    <Compile Include="OperatorMain.xaml.cs">
-      <DependentUpon>OperatorMain.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Request.cs" />
-    <Compile Include="TaxiMain.xaml.cs">
-      <DependentUpon>TaxiMain.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="User.cs" />
-    <Compile Include="UserMain.xaml.cs">
-      <DependentUpon>UserMain.xaml</DependentUpon>
-    </Compile>
-    <Page Include="Add_Driver_Foe_Order.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Add_Order.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Change_Order.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="MainWin.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWin.xaml.cs">
-      <DependentUpon>MainWin.xaml</DependentUpon>
+    <Compile Include="Models\Client.cs" />
+    <Compile Include="Models\DB.cs" />
+    <Compile Include="Models\Drive.cs" />
+    <Compile Include="Models\Driver.cs" />
+    <Compile Include="Models\Operator.cs" />
+    <Compile Include="Models\Request.cs" />
+    <Compile Include="Models\Status.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="Pages\Add_Driver_Foe_Order.xaml.cs">
+      <DependentUpon>Add_Driver_Foe_Order.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Add_Order.xaml.cs">
+      <DependentUpon>Add_Order.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Change_Order.xaml.cs">
+      <DependentUpon>Change_Order.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Auth.xaml.cs">
+      <DependentUpon>Auth.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\OperatorMain.xaml.cs">
+      <DependentUpon>OperatorMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\TaxiMain.xaml.cs">
+      <DependentUpon>TaxiMain.xaml</DependentUpon>
+    </Compile>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="OperatorMain.xaml">
+    <Page Include="Pages\Add_Driver_Foe_Order.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TaxiMain.xaml">
+    <Page Include="Pages\Add_Order.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserMain.xaml">
+    <Page Include="Pages\Change_Order.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Auth.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\OperatorMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\TaxiMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\UserMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Pages\UserMain.xaml.cs">
+      <DependentUpon>UserMain.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -138,6 +143,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -147,8 +153,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Insert_taxi.sql" />
-    <Content Include="Taxi.sql" />
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
