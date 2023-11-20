@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Data.SqlClient;
+using System.Runtime.Remoting.Channels;
 using System.Windows;
 using System.Windows.Controls;
+using System.Text.RegularExpressions;
 
 namespace Taxi.Pages;
 
@@ -16,53 +18,86 @@ public partial class Reg : Page
 
     private void RegButton_OnClick(object sender, RoutedEventArgs e)
     {
-        if (FirstNameTextBox.Text != String.Empty && MiddleNameTextBox.Text != String.Empty && LastNameTextBox.Text != String.Empty &&
-            PhoneTextBox.Text != String.Empty && LoginTextBox.Text != String.Empty && PasswordTextBox.Text != String.Empty)
+        if (FirstNameTextBox.Text != String.Empty && MiddleNameTextBox.Text != String.Empty &&
+            LastNameTextBox.Text != String.Empty &&
+            PhoneTextBox.Text != String.Empty && LoginTextBox.Text != String.Empty &&
+            PasswordTextBox.Text != String.Empty)
         {
-            User user = _db.Users.Find(c => c.Login == LoginTextBox.Text);
-            if (user == null)
+            if (!Regex.IsMatch(FirstNameTextBox.Text, @"\d"))
             {
-                using (SqlConnection connection = new SqlConnection(_db.connectionString))
+                if (!Regex.IsMatch(MiddleNameTextBox.Text, @"\d"))
                 {
-                    connection.Open();
-                    string query = $"insert into [User] values (@Login,@Password,@FirstName,@LastName,@MiddleName,@Phone)";
-                    using (SqlCommand command = new SqlCommand(query, connection))
+                    if (!Regex.IsMatch(LastNameTextBox.Text, @"\d"))
                     {
-                        command.Parameters.AddWithValue("@Login", LoginTextBox.Text);
-                        command.Parameters.AddWithValue("@Password", PasswordTextBox.Text);
-                        command.Parameters.AddWithValue("@Phone", PhoneTextBox.Text);
-                        command.Parameters.AddWithValue("@FirstName", FirstNameTextBox.Text);
-                        command.Parameters.AddWithValue("@LastName", LastNameTextBox.Text);
-                        command.Parameters.AddWithValue("@MiddleName", MiddleNameTextBox.Text);
+                        if (FirstNameTextBox.Text.Length < 50 && MiddleNameTextBox.Text.Length < 50 &&
+                            LastNameTextBox.Text.Length < 50 &&
+                            LoginTextBox.Text.Length < 100 && PasswordTextBox.Text.Length < 100)
+                        {
+                            User user = _db.Users.Find(c => c.Login == LoginTextBox.Text);
+                            if (user == null)
+                            {
+                                using (SqlConnection connection = new SqlConnection(_db.connectionString))
+                                {
+                                    connection.Open();
+                                    string query =
+                                        $"insert into [User] values (@Login,@Password,@Phone,@FirstName,@LastName,@MiddleName)";
+                                    using (SqlCommand command = new SqlCommand(query, connection))
+                                    {
+                                        command.Parameters.AddWithValue("@Login", LoginTextBox.Text);
+                                        command.Parameters.AddWithValue("@Password", PasswordTextBox.Text);
+                                        command.Parameters.AddWithValue("@Phone", PhoneTextBox.Text);
+                                        command.Parameters.AddWithValue("@FirstName", FirstNameTextBox.Text);
+                                        command.Parameters.AddWithValue("@LastName", LastNameTextBox.Text);
+                                        command.Parameters.AddWithValue("@MiddleName", MiddleNameTextBox.Text);
 
-                        command.ExecuteNonQuery();
+                                        command.ExecuteNonQuery();
+                                    }
+
+                                    connection.Close();
+                                }
+
+                                _db = new DB();
+
+                                user = _db.Users.Find(c => c.Login == LoginTextBox.Text);
+                                using (SqlConnection connection = new SqlConnection(_db.connectionString))
+                                {
+                                    connection.Open();
+                                    string query = $"insert into [Client] values (@Id)";
+                                    using (SqlCommand command = new SqlCommand(query, connection))
+                                    {
+                                        command.Parameters.AddWithValue("@Id", user.Id);
+
+                                        command.ExecuteNonQuery();
+                                    }
+
+                                    connection.Close();
+                                }
+
+                                MessageBox.Show("Вы зарегистрировались!");
+                                NavigationService.GoBack();
+                            }
+                            else
+                                MessageBox.Show("Логин уже занят!");
+                        }
+                        else
+                        {
+                            MessageBox.Show("Некоторые поля имеют слишком много данных!"); 
+                        }
                     }
-
-                    connection.Close();
+                    else
+                    {
+                        MessageBox.Show("Поле Отчество некорректно заполнено!"); 
+                    }
                 }
-
-                _db = new DB();
-
-                user = _db.Users.Find(c => c.Login == LoginTextBox.Text);
-                using (SqlConnection connection = new SqlConnection(_db.connectionString))
+                else
                 {
-                    connection.Open();
-                    string query = $"insert into [Client] values (@Id)";
-                    using (SqlCommand command = new SqlCommand(query, connection))
-                    {
-                        command.Parameters.AddWithValue("@Id", user.Id);
-
-                        command.ExecuteNonQuery();
-                    }
-
-                    connection.Close();
+                    MessageBox.Show("Поле Фамилия некорректно заполнено!"); 
                 }
-
-                MessageBox.Show("Вы зарегистрировались!");
-                NavigationService.GoBack();
             }
             else
-                MessageBox.Show("Логин уже занят!");
+            {
+                MessageBox.Show("Поле Имя некорректно заполнено!");
+            }
         }
         else
         {

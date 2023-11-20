@@ -32,14 +32,23 @@ namespace Taxi
         {
             if (LoginTextBox.Text != "" && PasswordTextBox.Text != "")
             {
-                Client client = _db.Clients.FirstOrDefault(c => c.User.Login == LoginTextBox.Text && c.User.Password == PasswordTextBox.Text);
-                if (client != null)
+                if (LoginTextBox.Text.Length <= 15 && PasswordTextBox.Text.Length <= 15)
                 {
-                    NavigationService.Navigate(new UserMain(client.User));
+                    Client client = _db.Clients.FirstOrDefault(c =>
+                        c.User.Login == LoginTextBox.Text && c.User.Password == PasswordTextBox.Text);
+                    if (client != null)
+                    {
+                        NavigationService.Navigate(new UserMain(client.User));
+                    }
+                    else
+                    {
+                        MessageBox.Show("Клиент с такими данными не найден!", "Error!", MessageBoxButton.OK,
+                            MessageBoxImage.Error);
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("Клиент с такими данными не найден!", "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Поля содержат слишком много данных");
                 }
             }
             else

@@ -19,7 +19,7 @@ namespace Taxi
 
         public static DB _dB = new DB();
 
-        public string connectionString = @"Data Source=DESKTOP-OE4PBCI\SQLEXPRESS;Initial Catalog=Taxi;Integrated Security=True";
+        public string connectionString = @"Data Source=DESKTOP-R1EIB3B\SQLEXPRESS;Initial Catalog=Taxi;Integrated Security=True";
 
         public List<Request> Requests;
         public List<Client> Clients;
