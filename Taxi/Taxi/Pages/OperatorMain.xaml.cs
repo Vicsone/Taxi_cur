@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Taxi.Models;
 using Taxi.Pages;
 
 namespace Taxi
@@ -27,64 +28,107 @@ namespace Taxi
         {
             InitializeComponent();
             _operator = operatorr;
-            List<string> filter = new List<string>() { "Все", "Мои" };
-            FilterComboBox.ItemsSource = filter;
-            FilterComboBox.SelectedIndex = 0;
+            
+            RequestFilterComboBox.SelectedIndex = 0;
+            TaxiFilterComboBox.SelectedIndex = 0;
+
+            RequestLeastToMost.IsChecked = true;
+            TaxiLeastToMost.IsChecked = true;
+            
+            UpdateRequestGrid();
+            UpdateTaxiGrid();
         }
 
         private User _operator;
-        private DB _db = new DB();
 
-        private void LeastToMost_OnChecked(object sender, RoutedEventArgs e)
+
+        private void UpdateRequestGrid()
         {
-            UpdateGrid();
-        }
+            List<Request> requests = DB.entities.Requests;
+            // if (RequestFilterComboBox == null || RequestLeastToMost == null) return;
 
-        private void MostToLeast_OnChecked(object sender, RoutedEventArgs e)
-        {
-            UpdateGrid();
-        }
-
-        private void SearchTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
-        {
-            UpdateGrid();
-        }
-
-        private void UpdateGrid()
-        {
-            List<Request> requests = _db.Requests;
-            if (MostToLeast == null) return;
-
-            if (FilterComboBox.SelectedIndex == 0 && LeastToMost.IsChecked == true)
+            if (RequestFilterComboBox.SelectedIndex == 0)
             {
-                RequestDataGrid.ItemsSource = requests.Where(c =>
-                        c.AddressFrom.ToLower().Contains(SearchTextBox.Text.ToLower()) || c.AddressWhere.ToLower().Contains(SearchTextBox.Text.ToLower()))
-                    .OrderBy(c => c.Date).ToList();
+                if (RequestLeastToMost.IsChecked == true)
+                {
+                    RequestDataGrid.ItemsSource = requests.Where(c =>
+                            c.AddressFrom.ToLower().Contains(RequestSearchTextBox.Text.ToLower()) ||
+                            c.AddressWhere.ToLower().Contains(RequestSearchTextBox.Text.ToLower()))
+                        .OrderBy(c => c.Date).ToList();
+                }
+                else
+                {
+                    RequestDataGrid.ItemsSource =
+                        requests.Where(c =>
+                                c.AddressFrom.ToLower().Contains(RequestSearchTextBox.Text.ToLower()) ||
+                                c.AddressWhere.ToLower().Contains(RequestSearchTextBox.Text.ToLower()))
+                            .OrderByDescending(c => c.Date).ToList();
+                }
             }
 
-            if (FilterComboBox.SelectedIndex == 0 && MostToLeast.IsChecked == true)
+            else
             {
-                RequestDataGrid.ItemsSource =
-                    requests.Where(c =>
-                            c.AddressFrom.ToLower().Contains(SearchTextBox.Text.ToLower()) ||
-                            c.AddressWhere.ToLower().Contains(SearchTextBox.Text.ToLower()))
-                        .OrderByDescending(c => c.Date).ToList();
+                if (RequestLeastToMost.IsChecked == true)
+                {
+                    RequestDataGrid.ItemsSource = requests.Where(c =>
+                            (c.AddressFrom.ToLower().Contains(RequestSearchTextBox.Text.ToLower()) ||
+                             c.AddressWhere.ToLower().Contains(RequestSearchTextBox.Text.ToLower())) &&
+                            c.Operator == _operator)
+                        .OrderBy(c => c.Date).ToList();
+                }
+                else
+                {
+                    RequestDataGrid.ItemsSource =
+                        requests.Where(c =>
+                            (c.AddressFrom.ToLower().Contains(RequestSearchTextBox.Text.ToLower()) ||
+                             c.AddressWhere.ToLower().Contains(RequestSearchTextBox.Text.ToLower())) &&
+                            c.Operator == _operator).OrderByDescending(c => c.Date).ToList();
+                }
+            }
+        }
+
+        private void UpdateTaxiGrid()
+        {
+            List<Drive> drives = DB.entities.Drives;
+            // if (TaxiFilterComboBox == null || TaxiLeastToMost == null) return;
+
+            if (RequestFilterComboBox.SelectedIndex == 0)
+            {
+                if (TaxiLeastToMost.IsChecked == true)
+                {
+                    RequestDataGrid.ItemsSource = drives.Where(c =>
+                            c.Request.AddressFrom.ToLower().Contains(TaxiSearchTextBox.Text.ToLower()) ||
+                            c.Request.AddressWhere.ToLower().Contains(TaxiSearchTextBox.Text.ToLower()))
+                        .OrderBy(c => c.Request.Date).ToList();
+                }
+                else
+                {
+                    RequestDataGrid.ItemsSource =
+                        drives.Where(c =>
+                                c.Request.AddressFrom.ToLower().Contains(TaxiSearchTextBox.Text.ToLower()) ||
+                                c.Request.AddressWhere.ToLower().Contains(TaxiSearchTextBox.Text.ToLower()))
+                            .OrderByDescending(c => c.Request.Date).ToList();
+                }
             }
 
-            if (FilterComboBox.SelectedIndex != 0 && LeastToMost.IsChecked == true)
+            else
             {
-                RequestDataGrid.ItemsSource = requests.Where(c =>
-                        (c.AddressFrom.ToLower().Contains(SearchTextBox.Text.ToLower()) || c.AddressWhere.ToLower().Contains(SearchTextBox.Text.ToLower())) &&
-                        c.Operator == _operator)
-                    .OrderBy(c => c.Date).ToList();
-            }
-
-            if (FilterComboBox.SelectedIndex != 0 && MostToLeast.IsChecked == true)
-            {
-                RequestDataGrid.ItemsSource =
-                    requests.Where(c =>
-                        (c.AddressFrom.ToLower().Contains(SearchTextBox.Text.ToLower()) || c.AddressWhere.ToLower().Contains(SearchTextBox.Text.ToLower())) &&
-                        c.Operator == _operator).OrderByDescending(c => c.Date).ToList();
+                if (TaxiLeastToMost.IsChecked == true)
+                {
+                    RequestDataGrid.ItemsSource = drives.Where(c =>
+                            (c.Request.AddressFrom.ToLower().Contains(TaxiSearchTextBox.Text.ToLower()) ||
+                             c.Request.AddressWhere.ToLower().Contains(TaxiSearchTextBox.Text.ToLower())) &&
+                            c.Request.Operator == _operator)
+                        .OrderBy(c => c.Request.Date).ToList();
+                }
+                else
+                {
+                    RequestDataGrid.ItemsSource =
+                        drives.Where(c =>
+                            (c.Request.AddressFrom.ToLower().Contains(TaxiSearchTextBox.Text.ToLower()) ||
+                             c.Request.AddressWhere.ToLower().Contains(TaxiSearchTextBox.Text.ToLower())) &&
+                            c.Request.Operator == _operator).OrderByDescending(c => c.Request.Date).ToList();
+                }
             }
         }
 
@@ -92,10 +136,11 @@ namespace Taxi
         {
             if (RequestDataGrid.SelectedItem != null)
             {
-                var result = MessageBox.Show("Вы точно хотите удалить заказ?", "Сообщение", MessageBoxButton.YesNo);
+                var result = MessageBox.Show("Вы точно хотите удалить заказ?", "Сообщение",
+                    MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.Yes)
                 {
-                    using (SqlConnection connection = new SqlConnection(_db.connectionString))
+                    using (SqlConnection connection = new SqlConnection(DB.entities.connectionString))
                     {
                         connection.Open();
                         string query =
@@ -109,8 +154,8 @@ namespace Taxi
                     }
 
                     MessageBox.Show("Заявка удалена!");
-                    _db = new DB();
-                    UpdateGrid();
+                    DB.entities.UpdateAll();
+                    UpdateRequestGrid();
                 }
             }
             else
@@ -122,19 +167,30 @@ namespace Taxi
             if (RequestDataGrid.SelectedItem != null)
             {
                 NavigationService.Navigate(new EditRequest((Request)RequestDataGrid.SelectedItem, _operator));
+                DB.entities.UpdateAll();
+                UpdateRequestGrid();
             }
             else
                 MessageBox.Show("Сначала выберите строку в таблице!");
         }
 
-        private void OperatorMain_OnLoaded(object sender, RoutedEventArgs e)
-        {
-            _db = new DB();
-        }
+        private void TaxiSearchTextBox_OnTextChanged(object sender, TextChangedEventArgs e) => UpdateTaxiGrid();
 
-        private void FilterComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            UpdateGrid();
-        }
+        private void TaxiLeastToMost_OnChecked(object sender, RoutedEventArgs e) => UpdateTaxiGrid();
+
+        private void TaxiMostToLeast_OnChecked(object sender, RoutedEventArgs e) => UpdateTaxiGrid();
+
+        private void TaxiFilterComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e) =>
+            UpdateTaxiGrid();
+
+        private void RequestMostToLeast_OnChecked(object sender, RoutedEventArgs e) => UpdateRequestGrid();
+
+        private void RequestSearchTextBox_OnTextChanged(object sender, TextChangedEventArgs e) =>
+            UpdateRequestGrid();
+
+        private void RequestFilterComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e) =>
+            UpdateRequestGrid();
+
+        private void RequestLeastToMost_OnChecked(object sender, RoutedEventArgs e) => UpdateRequestGrid();
     }
 }

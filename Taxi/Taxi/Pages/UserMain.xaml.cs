@@ -16,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Taxi.Models;
 
 namespace Taxi
 {
@@ -24,64 +25,81 @@ namespace Taxi
     /// </summary>
     public partial class UserMain : Page
     {
-        private DB _db = new DB();
-
         public UserMain(User client)
         {
             InitializeComponent();
             _client = client;
-            LeastToMost.IsChecked = true;
+            RequestUpdateGrid();
+            TaxiUpdateGrid();
+            RequestLeastToMost.IsChecked = true;
+            TaxiLeastToMost.IsChecked = true;
         }
 
         private User _client;
-
-        private void LeastToMost_OnChecked(object sender, RoutedEventArgs e)
-        {
-            UpdateGrid();
-        }
-
-        private void MostToLeast_OnChecked(object sender, RoutedEventArgs e)
-        {
-            UpdateGrid();
-        }
 
         private void AddRequestButton_OnClick(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new Add_Order(_client));
         }
 
-        private void SearchTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        private void RequestUpdateGrid()
         {
-            UpdateGrid();
-        }
+            List<Request> requests = DB.entities.Requests.Where(c => c.ClientId == _client.Id).ToList();
 
-        private void UpdateGrid()
-        {
-            List<Request> requests = _db.Requests.Where(c => c.ClientId == _client.Id).ToList();
-            if (LeastToMost == null) return;
-            
             if (requests.Count != 0)
             {
-                if (LeastToMost.IsChecked == true)
-                {
-                    RequestDataGrid.ItemsSource = requests.Where(c =>
-                            c.AddressFrom.ToLower().Contains(SearchTextBox.Text.ToLower()) || c.AddressWhere.ToLower().Contains(SearchTextBox.Text.ToLower()))
-                        .OrderBy(c => c.Date).ToList();
-                }
-                else
+                if (RequestMostToLeast.IsChecked == true)
                 {
                     RequestDataGrid.ItemsSource =
                         requests.Where(c =>
-                                c.AddressFrom.ToLower().Contains(SearchTextBox.Text.ToLower()) ||
-                                c.AddressWhere.ToLower().Contains(SearchTextBox.Text.ToLower()))
+                                c.AddressFrom.ToLower().Contains(RequestSearchTextBox.Text.ToLower()) ||
+                                c.AddressWhere.ToLower().Contains(RequestSearchTextBox.Text.ToLower()))
                             .OrderByDescending(c => c.Date).ToList();
+                }
+                else
+                {
+                    RequestDataGrid.ItemsSource = requests.Where(c =>
+                            c.AddressFrom.ToLower().Contains(RequestSearchTextBox.Text.ToLower()) ||
+                            c.AddressWhere.ToLower().Contains(RequestSearchTextBox.Text.ToLower()))
+                        .OrderBy(c => c.Date).ToList();
                 }
             }
         }
 
-        private void UserMain_OnLoaded(object sender, RoutedEventArgs e)
+        private void TaxiUpdateGrid()
         {
-            _db = new DB();
+            List<Drive> drives = DB.entities.Drives.Where(c => c.Request.ClientId == _client.Id).ToList();
+
+            if (drives.Count != 0)
+            {
+                if (TaxiMostToLeast.IsChecked == true)
+                {
+                    TaxiDataGrid.ItemsSource =
+                        drives.Where(c =>
+                                c.Request.AddressFrom.ToLower().Contains(TaxiSearchTextBox.Text.ToLower()) ||
+                                c.Request.AddressWhere.ToLower().Contains(TaxiSearchTextBox.Text.ToLower()))
+                            .OrderByDescending(c => c.Request.Date).ToList();
+                }
+                else
+                {
+                    TaxiDataGrid.ItemsSource = drives.Where(c =>
+                            c.Request.AddressFrom.ToLower().Contains(TaxiSearchTextBox.Text.ToLower()) ||
+                            c.Request.AddressWhere.ToLower().Contains(TaxiSearchTextBox.Text.ToLower()))
+                        .OrderBy(c => c.Request.Date).ToList();
+                }
+            }
         }
+
+        private void TaxiLeastToMost_OnChecked(object sender, RoutedEventArgs e) => TaxiUpdateGrid();
+
+        private void TaxiMostToLeast_OnChecked(object sender, RoutedEventArgs e) => TaxiUpdateGrid();
+
+        private void RequestMostToLeast_OnChecked(object sender, RoutedEventArgs e) => RequestUpdateGrid();
+
+        private void RequestLeastToMost_OnChecked(object sender, RoutedEventArgs e) => RequestUpdateGrid();
+
+        private void RequestSearchTextBox_OnTextChanged(object sender, TextChangedEventArgs e) => RequestUpdateGrid();
+
+        private void TaxiSearchTextBox_OnTextChanged(object sender, TextChangedEventArgs e) => TaxiUpdateGrid();
     }
 }

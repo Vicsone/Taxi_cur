@@ -13,7 +13,7 @@ namespace Taxi
         public int DriverId { get; set; }
         public int RequestId { get; set; }
         public Status Status { get; set; }
-        public User Driver { get; set; }
+        public Driver Driver { get; set; }
         public Request Request { get; set; }
     }
 }

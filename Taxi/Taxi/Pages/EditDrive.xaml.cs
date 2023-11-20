@@ -1,6 +1,7 @@
 ﻿using System.Data.SqlClient;
 using System.Windows;
 using System.Windows.Controls;
+using Taxi.Models;
 
 namespace Taxi.Pages;
 
@@ -11,14 +12,14 @@ public partial class EditDrive : Page
         InitializeComponent();
 
         DataContext = drive;
-        StatusComboBox.ItemsSource = _db.StatusList;
+        StatusComboBox.ItemsSource = _taxiDb.StatusList;
     }
 
-    private DB _db = new DB();
+    private TaxiDB _taxiDb = new TaxiDB();
 
     private void SaveButton_OnClick(object sender, RoutedEventArgs e)
     {
-        using (SqlConnection connection = new SqlConnection(_db.connectionString))
+        using (SqlConnection connection = new SqlConnection(_taxiDb.connectionString))
         {
             connection.Open();
             string query =

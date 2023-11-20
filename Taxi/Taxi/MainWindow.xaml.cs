@@ -23,6 +23,7 @@ namespace Taxi
         public MainWindow()
         {
             InitializeComponent();
+            DB.entities.UpdateAll();
             Main.NavigationService.Navigate(new Auth());
         }
 

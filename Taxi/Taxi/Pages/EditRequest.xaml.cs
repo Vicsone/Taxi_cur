@@ -1,6 +1,7 @@
 ﻿using System.Data.SqlClient;
 using System.Windows;
 using System.Windows.Controls;
+using Taxi.Models;
 
 namespace Taxi.Pages;
 
@@ -11,17 +12,17 @@ public partial class EditRequest : Page
         InitializeComponent();
         DataContext = request;
         _operator = operatorr;
-        DriverComboBox.ItemsSource = _db.Drivers;
+        DriverComboBox.ItemsSource = _taxiDb.Drivers;
     }
 
-    private DB _db = new DB();
+    private TaxiDB _taxiDb = new TaxiDB();
     User _operator;
     
     private void SaveButton_OnClick(object sender, RoutedEventArgs e)
     {
         if (DriverComboBox.SelectedItem != null)
         {
-            using (SqlConnection connection = new SqlConnection(_db.connectionString))
+            using (SqlConnection connection = new SqlConnection(_taxiDb.connectionString))
             {
                 connection.Open();
                 string query =
@@ -34,7 +35,7 @@ public partial class EditRequest : Page
                 connection.Close();
             }
             
-            using (SqlConnection connection = new SqlConnection(_db.connectionString))
+            using (SqlConnection connection = new SqlConnection(_taxiDb.connectionString))
             {
                 connection.Open();
                 string query = $"insert into [Drive] values (@StatusId,@DriverId,@RequestId)";
