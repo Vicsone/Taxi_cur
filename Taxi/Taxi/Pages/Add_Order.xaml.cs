@@ -35,26 +35,38 @@ namespace Taxi
         {
             if (StartPositionTextBox.Text != String.Empty && NextPositionTextBox.Text != String.Empty)
             {
-                using (SqlConnection connection = new SqlConnection(_db.connectionString))
+                if (StartPositionTextBox.Text.Length <= 35 && NextPositionTextBox.Text.Length <= 35)
                 {
-                    connection.Open();
-                    string query = $"insert into [Request] values (@AddressFrom,@AddressWhere,@ClientId,@OperatorId,@Date)";
-                    using (SqlCommand command = new SqlCommand(query, connection))
+                    using (SqlConnection connection = new SqlConnection(_db.connectionString))
                     {
-                        command.Parameters.AddWithValue("@AddressFrom", StartPositionTextBox.Text);
-                        command.Parameters.AddWithValue("@AddressWhere", NextPositionTextBox.Text);
-                        command.Parameters.AddWithValue("@ClientId", _user.Id);
-                        command.Parameters.AddWithValue("@OperatorId", DBNull.Value);
-                        command.Parameters.AddWithValue("@Date", DateTime.Now);
+                        connection.Open();
+                        string query =
+                            $"insert into [Request] values (@AddressFrom,@AddressWhere,@ClientId,@OperatorId,@Date)";
+                        using (SqlCommand command = new SqlCommand(query, connection))
+                        {
+                            command.Parameters.AddWithValue("@AddressFrom", StartPositionTextBox.Text);
+                            command.Parameters.AddWithValue("@AddressWhere", NextPositionTextBox.Text);
+                            command.Parameters.AddWithValue("@ClientId", _user.Id);
+                            command.Parameters.AddWithValue("@OperatorId", DBNull.Value);
+                            command.Parameters.AddWithValue("@Date", DateTime.Now);
 
-                        command.ExecuteNonQuery();
+                            command.ExecuteNonQuery();
+                        }
+
+                        connection.Close();
                     }
 
-                    connection.Close();
+                    MessageBox.Show("Ваш заказ отправлен!");
+                    NavigationService.GoBack();
                 }
-
-                MessageBox.Show("Ваш заказ отправлен!");
-                NavigationService.GoBack();
+                else
+                {
+                    MessageBox.Show("Поля содержат слишком много данных");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Поля не могу быть пустыми");
             }
         }
     }

@@ -18,20 +18,27 @@ public partial class EditDrive : Page
 
     private void SaveButton_OnClick(object sender, RoutedEventArgs e)
     {
-        using (SqlConnection connection = new SqlConnection(_db.connectionString))
+        if (StatusComboBox.SelectedItem != null)
         {
-            connection.Open();
-            string query =
-                $"update [Drive] set StatusId = {((Status)StatusComboBox.SelectedItem).Id} where Id = {((Drive)DataContext).Id}";
-            using (SqlCommand command = new SqlCommand(query, connection))
+            using (SqlConnection connection = new SqlConnection(_db.connectionString))
             {
-                command.ExecuteNonQuery();
+                connection.Open();
+                string query =
+                    $"update [Drive] set StatusId = {((Status)StatusComboBox.SelectedItem).Id} where Id = {((Drive)DataContext).Id}";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.ExecuteNonQuery();
+                }
+
+                connection.Close();
             }
 
-            connection.Close();
+            MessageBox.Show("Сохранения изменены!");
+            NavigationService.GoBack();
         }
-
-        MessageBox.Show("Сохранения изменены!");
-        NavigationService.GoBack();
+        else
+        {
+            MessageBox.Show("Поле статус не может быть пустым");
+        }
     }
 }
