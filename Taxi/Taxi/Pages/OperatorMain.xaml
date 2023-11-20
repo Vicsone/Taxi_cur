@@ -5,39 +5,127 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:Taxi"
       mc:Ignorable="d"
-      Loaded="OperatorMain_OnLoaded"
       d:DesignHeight="auto" d:DesignWidth="auto"
       Title="Заказы">
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-
-        <StackPanel Orientation="Horizontal">
-            <TextBlock Style="{StaticResource DefaultTextBlock}" Text="Поиск: " VerticalAlignment="Center" />
-            <TextBox x:Name="SearchTextBox" Style="{StaticResource DefaultTextBox}" VerticalAlignment="Center" TextChanged="SearchTextBox_OnTextChanged" />
-            <TextBlock Style="{StaticResource DefaultTextBlock}" Text="Фильтрация: " VerticalAlignment="Center" />
-            <ComboBox x:Name="FilterComboBox" SelectionChanged="FilterComboBox_OnSelectionChanged" Width="100" Height="25" />
-            <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="3">
-                <RadioButton x:Name="LeastToMost" IsChecked="True" Checked="LeastToMost_OnChecked" Margin="2" Content="От новых к старым" />
-                <RadioButton x:Name="MostToLeast" Checked="MostToLeast_OnChecked" Margin="2" Content="От старых к новым" />
-            </StackPanel>
-        </StackPanel>
-        <DataGrid Grid.Row="1" x:Name="RequestDataGrid" Height="250" Margin="10" AutoGenerateColumns="False" IsReadOnly="True">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Номер" Binding="{Binding Id}" />
-                <DataGridTextColumn Header="Откуда" Binding="{Binding AddressFrom}" MinWidth="100" />
-                <DataGridTextColumn Header="Куда" Binding="{Binding AddressWhere}" MinWidth="100" />
-                <DataGridTextColumn Header="Клиент" Binding="{Binding Client.Fullname}" MinWidth="100" />
-                <DataGridTextColumn Header="Дата" Binding="{Binding Date}" MinWidth="100" />
-            </DataGrid.Columns>
-        </DataGrid>
-        <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Button x:Name="DeleteButton" Click="DeleteButton_OnClick" Style="{StaticResource DefaultButton}" Width="200" Content="Удалить заявку" />
-            <Button x:Name="EditButton" Click="EditButton_OnClick" Style="{StaticResource DefaultButton}" Width="200" Content="Назначить водителя" />
-        </StackPanel>
+        <TabControl>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="30" Height="30" Source="/Resources/phone.png" />
+                        <TextBlock Style="{StaticResource DefaultTextBlock}" Text="Заявки" />
+                    </StackPanel>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource DefaultTextBlock}" Text="Поиск: "
+                                       VerticalAlignment="Center" />
+                            <TextBox x:Name="RequestSearchTextBox" Style="{StaticResource DefaultTextBox}"
+                                     VerticalAlignment="Center"
+                                     TextChanged="RequestSearchTextBox_OnTextChanged" />
+                            <TextBlock Style="{StaticResource DefaultTextBlock}" Text="Фильтрация: "
+                                       VerticalAlignment="Center" />
+                            <ComboBox x:Name="RequestFilterComboBox"
+                                      SelectionChanged="RequestFilterComboBox_OnSelectionChanged" Width="100"
+                                      Height="25">
+                                <ComboBoxItem>
+                                    <TextBlock Text="Все" />
+                                </ComboBoxItem>
+                                <ComboBoxItem>
+                                    <TextBlock Text="Мои" />
+                                </ComboBoxItem>
+                            </ComboBox>
+                            <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="3">
+                                <RadioButton x:Name="RequestLeastToMost"
+                                             Checked="RequestLeastToMost_OnChecked" Margin="2"
+                                             Content="Сначала новые" />
+                                <RadioButton x:Name="RequestMostToLeast" Checked="RequestMostToLeast_OnChecked"
+                                             Margin="2"
+                                             Content="Сначала старые" />
+                            </StackPanel>
+                        </StackPanel>
+                        <DataGrid Grid.Row="1" x:Name="RequestDataGrid" Height="250" Margin="10"
+                                  AutoGenerateColumns="False"
+                                  IsReadOnly="True">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Номер" Binding="{Binding Id}" MinWidth="50" />
+                                <DataGridTextColumn Header="Откуда" Binding="{Binding AddressFrom}" MinWidth="50" />
+                                <DataGridTextColumn Header="Куда" Binding="{Binding AddressWhere}" MinWidth="50" />
+                                <DataGridTextColumn Header="Клиент" Binding="{Binding Client.Fullname}" MinWidth="50" />
+                                <DataGridTextColumn Header="Дата" Binding="{Binding Date}" MinWidth="50" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button x:Name="DeleteButton" Click="DeleteButton_OnClick"
+                                    Style="{StaticResource DefaultButton}" Width="200" Content="Удалить заявку" />
+                            <Button x:Name="EditButton" Click="EditButton_OnClick"
+                                    Style="{StaticResource DefaultButton}" Width="200" Content="Назначить водителя" />
+                        </StackPanel>
+                    </Grid>
+                </TabItem.Content>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="30" Height="30" Source="/Resources/taxi.png" />
+                        <TextBlock Style="{StaticResource DefaultTextBlock}" Text="Поездки" />
+                    </StackPanel>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource DefaultTextBlock}" Text="Поиск: "
+                                       VerticalAlignment="Center" />
+                            <TextBox x:Name="TaxiSearchTextBox" Style="{StaticResource DefaultTextBox}"
+                                     VerticalAlignment="Center" TextChanged="TaxiSearchTextBox_OnTextChanged" />
+                            <TextBlock Style="{StaticResource DefaultTextBlock}" Text="Фильтрация: "
+                                       VerticalAlignment="Center" />
+                            <ComboBox x:Name="TaxiFilterComboBox"
+                                      SelectionChanged="TaxiFilterComboBox_OnSelectionChanged" Width="100"
+                                      Height="25">
+                                <ComboBoxItem>
+                                    <TextBlock Text="Все" />
+                                </ComboBoxItem>
+                                <ComboBoxItem>
+                                    <TextBlock Text="Мои" />
+                                </ComboBoxItem>
+                            </ComboBox>
+                            <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="3">
+                                <RadioButton x:Name="TaxiLeastToMost" Checked="TaxiLeastToMost_OnChecked" Margin="2"
+                                             Content="Сначала новые" />
+                                <RadioButton x:Name="TaxiMostToLeast" Checked="TaxiMostToLeast_OnChecked" Margin="2"
+                                             Content="Сначала старые" />
+                            </StackPanel>
+                        </StackPanel>
+                        <DataGrid Grid.Row="1" x:Name="TaxiDataGrid" Height="250" Margin="10"
+                                  AutoGenerateColumns="False"
+                                  IsReadOnly="True">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Дата" Binding="{Binding Request.Date}" MinWidth="50" />
+                                <DataGridTextColumn Header="Откуда" Binding="{Binding Request.AddressFrom}"
+                                                    MinWidth="50" />
+                                <DataGridTextColumn Header="Куда" Binding="{Binding Request.AddressWhere}"
+                                                    MinWidth="50" />
+                                <DataGridTextColumn Header="ФИО Водителя" Binding="{Binding Driver.User.Fullname}"
+                                                    MinWidth="50" />
+                                <DataGridTextColumn Header="Стаж" Binding="{Binding Driver.Experience}" MinWidth="50" />
+                                <DataGridTextColumn Header="Рейтинг" Binding="{Binding Driver.Rating}" MinWidth="50" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </TabItem.Content>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Page>

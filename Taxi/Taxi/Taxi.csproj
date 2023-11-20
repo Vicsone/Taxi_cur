@@ -62,6 +62,7 @@
     </Compile>
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\DB.cs" />
+    <Compile Include="Models\TaxiDB.cs" />
     <Compile Include="Models\Drive.cs" />
     <Compile Include="Models\Driver.cs" />
     <Compile Include="Models\Operator.cs" />
@@ -156,6 +157,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\taxi.png" />
+    <Resource Include="Resources\phone.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

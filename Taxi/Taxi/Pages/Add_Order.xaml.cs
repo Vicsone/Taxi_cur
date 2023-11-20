@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Taxi.Models;
 
 namespace Taxi
 {
@@ -28,14 +29,14 @@ namespace Taxi
             _user = user;
         }
 
-        private DB _db = new DB();
+        private TaxiDB _taxiDb = new TaxiDB();
         private User _user;
         
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
             if (StartPositionTextBox.Text != String.Empty && NextPositionTextBox.Text != String.Empty)
             {
-                using (SqlConnection connection = new SqlConnection(_db.connectionString))
+                using (SqlConnection connection = new SqlConnection(_taxiDb.connectionString))
                 {
                     connection.Open();
                     string query = $"insert into [Request] values (@AddressFrom,@AddressWhere,@ClientId,@OperatorId,@Date)";
