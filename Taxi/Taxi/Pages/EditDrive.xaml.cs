@@ -1,6 +1,7 @@
 ﻿using System.Data.SqlClient;
 using System.Windows;
 using System.Windows.Controls;
+using Taxi.Models;
 
 namespace Taxi.Pages;
 
@@ -11,34 +12,27 @@ public partial class EditDrive : Page
         InitializeComponent();
 
         DataContext = drive;
-        StatusComboBox.ItemsSource = _db.StatusList;
+        StatusComboBox.ItemsSource = _taxiDb.StatusList;
     }
 
-    private DB _db = new DB();
+    private TaxiDB _taxiDb = new TaxiDB();
 
     private void SaveButton_OnClick(object sender, RoutedEventArgs e)
     {
-        if (StatusComboBox.SelectedItem != null)
+        using (SqlConnection connection = new SqlConnection(_taxiDb.connectionString))
         {
-            using (SqlConnection connection = new SqlConnection(_db.connectionString))
+            connection.Open();
+            string query =
+                $"update [Drive] set StatusId = {((Status)StatusComboBox.SelectedItem).Id} where Id = {((Drive)DataContext).Id}";
+            using (SqlCommand command = new SqlCommand(query, connection))
             {
-                connection.Open();
-                string query =
-                    $"update [Drive] set StatusId = {((Status)StatusComboBox.SelectedItem).Id} where Id = {((Drive)DataContext).Id}";
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    command.ExecuteNonQuery();
-                }
-
-                connection.Close();
+                command.ExecuteNonQuery();
             }
 
-            MessageBox.Show("Сохранения изменены!");
-            NavigationService.GoBack();
+            connection.Close();
         }
-        else
-        {
-            MessageBox.Show("Поле статус не может быть пустым");
-        }
+
+        MessageBox.Show("Сохранения изменены!");
+        NavigationService.GoBack();
     }
 }

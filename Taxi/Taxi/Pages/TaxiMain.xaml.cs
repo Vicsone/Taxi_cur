@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Taxi.Models;
 using Taxi.Pages;
 
 namespace Taxi
@@ -21,7 +22,7 @@ namespace Taxi
     /// </summary>
     public partial class TaxiMain : Page
     {
-        private DB _db = new DB();
+        private TaxiDB _taxiDb = new TaxiDB();
 
         public TaxiMain(User driver)
         {
@@ -59,7 +60,7 @@ namespace Taxi
 
         private void UpdateGrid()
         {
-            List<Drive> drives = _db.Drives.Where(c => c.Driver.Id == _driver.Id).ToList();
+            List<Drive> drives = _taxiDb.Drives.Where(c => c.Driver.Id == _driver.Id).ToList();
             if (LeastToMost == null) return;
 
             if (drives.Count != 0)
@@ -85,7 +86,7 @@ namespace Taxi
 
         private void TaxiMain_OnLoaded(object sender, RoutedEventArgs e)
         {
-            _db = new DB();
+            _taxiDb = new TaxiDB();
         }
     }
 }

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("insert_taxi.sql")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("taxi.sql")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resources/taxi.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resources/phone.png")]
 
 

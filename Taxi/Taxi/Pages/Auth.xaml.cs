@@ -24,36 +24,29 @@ namespace Taxi
         public Auth()
         {
             InitializeComponent();
+            int d = 2;
         }
 
-        private readonly DB _db = new DB();
-        
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             if (LoginTextBox.Text != "" && PasswordTextBox.Text != "")
             {
-                if (LoginTextBox.Text.Length <= 15 && PasswordTextBox.Text.Length <= 15)
+                Client client = DB.entities.Clients.FirstOrDefault(c =>
+                    c.User.Login == LoginTextBox.Text && c.User.Password == PasswordTextBox.Text);
+                if (client != null)
                 {
-                    Client client = _db.Clients.FirstOrDefault(c =>
-                        c.User.Login == LoginTextBox.Text && c.User.Password == PasswordTextBox.Text);
-                    if (client != null)
-                    {
-                        NavigationService.Navigate(new UserMain(client.User));
-                    }
-                    else
-                    {
-                        MessageBox.Show("Клиент с такими данными не найден!", "Error!", MessageBoxButton.OK,
-                            MessageBoxImage.Error);
-                    }
+                    NavigationService.Navigate(new UserMain(client.User));
                 }
                 else
                 {
-                    MessageBox.Show("Поля содержат слишком много данных");
+                    MessageBox.Show("Клиент с такими данными не найден!", "Error!", MessageBoxButton.OK,
+                        MessageBoxImage.Error);
                 }
             }
             else
             {
-                MessageBox.Show("Логин или пароль не может быть пустым", "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Логин или пароль не может быть пустым", "Error!", MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
         }
 
@@ -61,19 +54,22 @@ namespace Taxi
         {
             if (LoginTextBox.Text != "" && PasswordTextBox.Text != "")
             {
-                Driver driver = _db.Drivers.FirstOrDefault(c => c.User.Login == LoginTextBox.Text && c.User.Password == PasswordTextBox.Text);
+                Driver driver = DB.entities.Drivers.FirstOrDefault(c =>
+                    c.User.Login == LoginTextBox.Text && c.User.Password == PasswordTextBox.Text);
                 if (driver != null)
                 {
                     NavigationService.Navigate(new TaxiMain(driver.User));
                 }
                 else
                 {
-                    MessageBox.Show("Водитель с такими данными не найден!", "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Водитель с такими данными не найден!", "Error!", MessageBoxButton.OK,
+                        MessageBoxImage.Error);
                 }
             }
             else
             {
-                MessageBox.Show("Логин или пароль не может быть пустым", "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Логин или пароль не может быть пустым", "Error!", MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
         }
 
@@ -81,19 +77,22 @@ namespace Taxi
         {
             if (LoginTextBox.Text != "" && PasswordTextBox.Text != "")
             {
-                Operator dbOperator = _db.Operators.FirstOrDefault(c => c.User.Login == LoginTextBox.Text && c.User.Password == PasswordTextBox.Text);
+                Operator dbOperator = DB.entities.Operators.FirstOrDefault(c =>
+                    c.User.Login == LoginTextBox.Text && c.User.Password == PasswordTextBox.Text);
                 if (dbOperator != null)
                 {
                     NavigationService.Navigate(new OperatorMain(dbOperator.User));
                 }
                 else
                 {
-                    MessageBox.Show("Оператор с такими данными не найден!", "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Оператор с такими данными не найден!", "Error!", MessageBoxButton.OK,
+                        MessageBoxImage.Error);
                 }
             }
             else
             {
-                MessageBox.Show("Логин или пароль не может быть пустым", "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Логин или пароль не может быть пустым", "Error!", MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
         }
     }
