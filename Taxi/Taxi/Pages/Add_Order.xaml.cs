@@ -22,64 +22,39 @@ namespace Taxi
     public partial class Add_Order : Page
     {
         SqlConnection connection = new SqlConnection();
-        public Add_Order()
+        public Add_Order(User user)
         {
             InitializeComponent();
+            _user = user;
         }
 
-        private void Back_button_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new UserMain());
-        }
-
+        private DB _db = new DB();
+        private User _user;
+        
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            string startposition = StartPositionTextBox.Text;
-            string nextposition = NextPositionTextBox.Text;
-            int client_id = 0;
-            try
+            if (StartPositionTextBox.Text != String.Empty && NextPositionTextBox.Text != String.Empty)
             {
-
-                if (startposition != "" && nextposition != "")
+                using (SqlConnection connection = new SqlConnection(_db.connectionString))
                 {
-                    if(startposition.Length<30 && nextposition.Length < 30)
+                    connection.Open();
+                    string query = $"insert into [Request] values (@AddressFrom,@AddressWhere,@ClientId,@OperatorId,@Date)";
+                    using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                        string connectionString = @"Data Source=DESKTOP-R1EIB3B\SQLEXPRESS;Initial Catalog=Taxi;Integrated Security=True";
-                        string ins_ord = $"INSERT INTO Request(AddressFrom,AddressWhere,ClientId) VALUES (@startposition,@nextposition,@client_id)";
-                        string sel_client = "SELECT Client.Id FROM Client,[User] WHERE Client.Id = [User].Id";
+                        command.Parameters.AddWithValue("@AddressFrom", StartPositionTextBox.Text);
+                        command.Parameters.AddWithValue("@AddressWhere", NextPositionTextBox.Text);
+                        command.Parameters.AddWithValue("@ClientId", _user.Id);
+                        command.Parameters.AddWithValue("@OperatorId", DBNull.Value);
+                        command.Parameters.AddWithValue("@Date", DateTime.Now);
 
-                        connection = new SqlConnection(connectionString);
-                        connection.Open();
-
-                        SqlCommand sqlCommand = new SqlCommand(sel_client, connection);
-                        SqlDataReader reader = sqlCommand.ExecuteReader();
-                        while (reader.Read())
-                        {
-                            client_id = reader.GetInt32(reader.GetOrdinal("Id"));
-                        }
-                        reader.Close();
-
-                        SqlCommand sqlCommand1 = new SqlCommand(ins_ord, connection);
-                        sqlCommand1.Parameters.AddWithValue("startposition", startposition);
-                        sqlCommand1.Parameters.AddWithValue("nextposition", nextposition);
-                        sqlCommand1.Parameters.AddWithValue("client_id", client_id);
-                        sqlCommand1.ExecuteNonQuery();
-
-                        connection.Close();
+                        command.ExecuteNonQuery();
                     }
-                    else
-                    {
-                        MessageBox.Show("Слишком много данных", "Error!", MessageBoxButton.OK, MessageBoxImage.Stop);
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Есть незаполненные поля", "Error!", MessageBoxButton.OK, MessageBoxImage.Stop);
-                }
-            }
-            catch (Exception ex)
-            {
 
+                    connection.Close();
+                }
+
+                MessageBox.Show("Ваш заказ отправлен!");
+                NavigationService.GoBack();
             }
         }
     }

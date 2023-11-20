@@ -21,43 +21,25 @@ namespace Taxi
     /// </summary>
     public partial class Auth : Page
     {
-        SqlConnection connection = new SqlConnection();
-        List<User> users; 
         public Auth()
         {
             InitializeComponent();
         }
 
+        private readonly DB _db = new DB();
+        
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             if (LoginTextBox.Text != "" && PasswordTextBox.Text != "")
             {
-                users = new List<User>();
-                string connectionString = @"Data Source=DESKTOP-R1EIB3B\SQLEXPRESS;Initial Catalog=Taxi;Integrated Security=True";
-                string sqlExpression = "SELECT [Login],[Password] FROM [User],Client WHERE Client.Id=[User].Id";
-
-                connection = new SqlConnection(connectionString);
-                connection.Open();
-
-                SqlCommand sqlCommand = new SqlCommand(sqlExpression, connection);
-                SqlDataReader reader = sqlCommand.ExecuteReader();
-                if (reader.HasRows)
+                Client client = _db.Clients.FirstOrDefault(c => c.User.Login == LoginTextBox.Text && c.User.Password == PasswordTextBox.Text);
+                if (client != null)
                 {
-                    while (reader.Read())
-                    {
-                        User user = new User();
-                        user.Login = reader.GetString(reader.GetOrdinal("login"));
-                        user.Password = reader.GetString(reader.GetOrdinal("password"));
-                        users.Add(user);
-                    }
+                    NavigationService.Navigate(new UserMain(client.User));
                 }
-                reader.Close();
-                foreach(var item in users)
+                else
                 {
-                    if (LoginTextBox.Text == item.Login && PasswordTextBox.Text == item.Password)
-                    {
-                        NavigationService.Navigate(new UserMain());
-                    }
+                    MessageBox.Show("Клиент с такими данными не найден!", "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             else
@@ -70,32 +52,14 @@ namespace Taxi
         {
             if (LoginTextBox.Text != "" && PasswordTextBox.Text != "")
             {
-                users = new List<User>();
-                string connectionString = @"Data Source=DESKTOP-R1EIB3B\SQLEXPRESS;Initial Catalog=Taxi;Integrated Security=True";
-                string sqlExpression = "SELECT [Login],[Password] FROM [User],Driver WHERE Driver.Id=[User].Id";
-
-                connection = new SqlConnection(connectionString);
-                connection.Open();
-                SqlCommand sqlCommand = new SqlCommand(sqlExpression, connection);
-                sqlCommand.Parameters.AddWithValue("login", LoginTextBox.Text);
-                SqlDataReader reader = sqlCommand.ExecuteReader();
-                if (reader.HasRows)
+                Driver driver = _db.Drivers.FirstOrDefault(c => c.User.Login == LoginTextBox.Text && c.User.Password == PasswordTextBox.Text);
+                if (driver != null)
                 {
-                    while (reader.Read())
-                    {
-                        User user = new User();
-                        user.Login = reader.GetString(reader.GetOrdinal("login"));
-                        user.Password = reader.GetString(reader.GetOrdinal("password"));
-                        users.Add(user);
-                    }
+                    NavigationService.Navigate(new TaxiMain(driver.User));
                 }
-                reader.Close();
-                foreach (var item in users)
+                else
                 {
-                    if (LoginTextBox.Text == item.Login && PasswordTextBox.Text == item.Password)
-                    {
-                        NavigationService.Navigate(new TaxiMain());
-                    }
+                    MessageBox.Show("Водитель с такими данными не найден!", "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             else
@@ -108,32 +72,14 @@ namespace Taxi
         {
             if (LoginTextBox.Text != "" && PasswordTextBox.Text != "")
             {
-                users = new List<User>();
-                string connectionString = @"Data Source=DESKTOP-R1EIB3B\SQLEXPRESS;Initial Catalog=Taxi;Integrated Security=True";
-                string sqlExpression = "SELECT [Login],[Password] FROM [User],Operator WHERE Operator.Id=[User].Id";
-
-                connection = new SqlConnection(connectionString);
-                connection.Open();
-                SqlCommand sqlCommand = new SqlCommand(sqlExpression, connection);
-                sqlCommand.Parameters.AddWithValue("login", LoginTextBox.Text);
-                SqlDataReader reader = sqlCommand.ExecuteReader();
-                if (reader.HasRows)
+                Operator dbOperator = _db.Operators.FirstOrDefault(c => c.User.Login == LoginTextBox.Text && c.User.Password == PasswordTextBox.Text);
+                if (dbOperator != null)
                 {
-                    while (reader.Read())
-                    {
-                        User user = new User();
-                        user.Login = reader.GetString(reader.GetOrdinal("login"));
-                        user.Password = reader.GetString(reader.GetOrdinal("password"));
-                        users.Add(user);
-                    }
+                    NavigationService.Navigate(new OperatorMain(dbOperator.User));
                 }
-                reader.Close();
-                foreach (var item in users)
+                else
                 {
-                    if (LoginTextBox.Text == item.Login && PasswordTextBox.Text == item.Password)
-                    {
-                        NavigationService.Navigate(new OperatorMain());
-                    }
+                    MessageBox.Show("Оператор с такими данными не найден!", "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             else

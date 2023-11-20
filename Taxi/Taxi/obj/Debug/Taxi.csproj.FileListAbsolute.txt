@@ -37,9 +37,7 @@ C:\Users\deer\RiderProjects\Taxi_cur\Taxi\Taxi\bin\Debug\System.Data.SqlClient.x
 C:\Users\deer\RiderProjects\Taxi_cur\Taxi\Taxi\obj\Debug\Taxi.csproj.AssemblyReference.cache
 C:\Users\deer\RiderProjects\Taxi_cur\Taxi\Taxi\obj\Debug\Taxi.csproj.SuggestedBindingRedirects.cache
 C:\Users\deer\RiderProjects\Taxi_cur\Taxi\Taxi\obj\Debug\MainWindow.g.cs
-C:\Users\deer\RiderProjects\Taxi_cur\Taxi\Taxi\obj\Debug\Pages\Add_Driver_Foe_Order.g.cs
 C:\Users\deer\RiderProjects\Taxi_cur\Taxi\Taxi\obj\Debug\Pages\Add_Order.g.cs
-C:\Users\deer\RiderProjects\Taxi_cur\Taxi\Taxi\obj\Debug\Pages\Change_Order.g.cs
 C:\Users\deer\RiderProjects\Taxi_cur\Taxi\Taxi\obj\Debug\Pages\Auth.g.cs
 C:\Users\deer\RiderProjects\Taxi_cur\Taxi\Taxi\obj\Debug\Pages\OperatorMain.g.cs
 C:\Users\deer\RiderProjects\Taxi_cur\Taxi\Taxi\obj\Debug\Pages\TaxiMain.g.cs
@@ -49,9 +47,7 @@ C:\Users\deer\RiderProjects\Taxi_cur\Taxi\Taxi\obj\Debug\Taxi_MarkupCompile.cach
 C:\Users\deer\RiderProjects\Taxi_cur\Taxi\Taxi\obj\Debug\Taxi_MarkupCompile.lref
 C:\Users\deer\RiderProjects\Taxi_cur\Taxi\Taxi\obj\Debug\App.baml
 C:\Users\deer\RiderProjects\Taxi_cur\Taxi\Taxi\obj\Debug\MainWindow.baml
-C:\Users\deer\RiderProjects\Taxi_cur\Taxi\Taxi\obj\Debug\Pages\Add_Driver_Foe_Order.baml
 C:\Users\deer\RiderProjects\Taxi_cur\Taxi\Taxi\obj\Debug\Pages\Add_Order.baml
-C:\Users\deer\RiderProjects\Taxi_cur\Taxi\Taxi\obj\Debug\Pages\Change_Order.baml
 C:\Users\deer\RiderProjects\Taxi_cur\Taxi\Taxi\obj\Debug\Pages\Auth.baml
 C:\Users\deer\RiderProjects\Taxi_cur\Taxi\Taxi\obj\Debug\Pages\OperatorMain.baml
 C:\Users\deer\RiderProjects\Taxi_cur\Taxi\Taxi\obj\Debug\Pages\TaxiMain.baml
@@ -63,3 +59,9 @@ C:\Users\deer\RiderProjects\Taxi_cur\Taxi\Taxi\obj\Debug\Taxi.csproj.CoreCompile
 C:\Users\deer\RiderProjects\Taxi_cur\Taxi\Taxi\obj\Debug\Taxi.csproj.CopyComplete
 C:\Users\deer\RiderProjects\Taxi_cur\Taxi\Taxi\obj\Debug\Taxi.exe
 C:\Users\deer\RiderProjects\Taxi_cur\Taxi\Taxi\obj\Debug\Taxi.pdb
+C:\Users\deer\RiderProjects\Taxi_cur\Taxi\Taxi\obj\Debug\Pages\EditDrive.g.cs
+C:\Users\deer\RiderProjects\Taxi_cur\Taxi\Taxi\obj\Debug\Pages\EditRequest.g.cs
+C:\Users\deer\RiderProjects\Taxi_cur\Taxi\Taxi\obj\Debug\Pages\Reg.g.cs
+C:\Users\deer\RiderProjects\Taxi_cur\Taxi\Taxi\obj\Debug\Pages\EditDrive.baml
+C:\Users\deer\RiderProjects\Taxi_cur\Taxi\Taxi\obj\Debug\Pages\EditRequest.baml
+C:\Users\deer\RiderProjects\Taxi_cur\Taxi\Taxi\obj\Debug\Pages\Reg.baml

@@ -23,11 +23,9 @@ namespace Taxi
         public MainWindow()
         {
             InitializeComponent();
-            Main.Content = new Auth();
+            Main.NavigationService.Navigate(new Auth());
         }
 
-        private DB _db = new DB();
-        
         private void BackButton_OnClick(object sender, RoutedEventArgs e) => Main.GoBack();
 
         private void Main_OnNavigated(object sender, NavigationEventArgs e)

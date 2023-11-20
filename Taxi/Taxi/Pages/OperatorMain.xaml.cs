@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Taxi.Pages;
 
 namespace Taxi
 {
@@ -22,60 +23,118 @@ namespace Taxi
     /// </summary>
     public partial class OperatorMain : Page
     {
-        SqlConnection connection = new SqlConnection();
-        List<Drive> drives;
-        DataTable dataTable;
-        public OperatorMain()
+        public OperatorMain(User operatorr)
         {
             InitializeComponent();
-            drives = new List<Drive>();
-            dataTable = new DataTable();
-            dataTable.Columns.Add("Drive_id", typeof(int));
-            dataTable.Columns.Add("StatusId", typeof(int));
-            dataTable.Columns.Add("DriverId", typeof(int));
-            dataTable.Columns.Add("RequestId", typeof(int));
-            string connectionString = @"Data Source=DESKTOP-R1EIB3B\SQLEXPRESS;Initial Catalog=Taxi;Integrated Security=True";
-            string sqlExpression = "SELECT * FROM Drive";
-            connection = new SqlConnection(connectionString);
-            connection.Open();
-            SqlCommand sqlCommand = new SqlCommand(sqlExpression, connection);
-            SqlDataReader reader = sqlCommand.ExecuteReader();
-            if (reader.HasRows)
+            _operator = operatorr;
+            List<string> filter = new List<string>() { "Все", "Мои" };
+            FilterComboBox.ItemsSource = filter;
+            FilterComboBox.SelectedIndex = 0;
+        }
+
+        private User _operator;
+        private DB _db = new DB();
+
+        private void LeastToMost_OnChecked(object sender, RoutedEventArgs e)
+        {
+            UpdateGrid();
+        }
+
+        private void MostToLeast_OnChecked(object sender, RoutedEventArgs e)
+        {
+            UpdateGrid();
+        }
+
+        private void SearchTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateGrid();
+        }
+
+        private void UpdateGrid()
+        {
+            List<Request> requests = _db.Requests;
+            if (MostToLeast == null) return;
+
+            if (FilterComboBox.SelectedIndex == 0 && LeastToMost.IsChecked == true)
             {
-                while (reader.Read())
+                RequestDataGrid.ItemsSource = requests.Where(c =>
+                        c.AddressFrom.ToLower().Contains(SearchTextBox.Text.ToLower()) || c.AddressWhere.ToLower().Contains(SearchTextBox.Text.ToLower()))
+                    .OrderBy(c => c.Date).ToList();
+            }
+
+            if (FilterComboBox.SelectedIndex == 0 && MostToLeast.IsChecked == true)
+            {
+                RequestDataGrid.ItemsSource =
+                    requests.Where(c =>
+                            c.AddressFrom.ToLower().Contains(SearchTextBox.Text.ToLower()) ||
+                            c.AddressWhere.ToLower().Contains(SearchTextBox.Text.ToLower()))
+                        .OrderByDescending(c => c.Date).ToList();
+            }
+
+            if (FilterComboBox.SelectedIndex != 0 && LeastToMost.IsChecked == true)
+            {
+                RequestDataGrid.ItemsSource = requests.Where(c =>
+                        (c.AddressFrom.ToLower().Contains(SearchTextBox.Text.ToLower()) || c.AddressWhere.ToLower().Contains(SearchTextBox.Text.ToLower())) &&
+                        c.Operator == _operator)
+                    .OrderBy(c => c.Date).ToList();
+            }
+
+            if (FilterComboBox.SelectedIndex != 0 && MostToLeast.IsChecked == true)
+            {
+                RequestDataGrid.ItemsSource =
+                    requests.Where(c =>
+                        (c.AddressFrom.ToLower().Contains(SearchTextBox.Text.ToLower()) || c.AddressWhere.ToLower().Contains(SearchTextBox.Text.ToLower())) &&
+                        c.Operator == _operator).OrderByDescending(c => c.Date).ToList();
+            }
+        }
+
+        private void DeleteButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (RequestDataGrid.SelectedItem != null)
+            {
+                var result = MessageBox.Show("Вы точно хотите удалить заказ?", "Сообщение", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
                 {
-                    Drive drive = new Drive();
-                    drive.Id = reader.GetInt32(reader.GetOrdinal("Id"));
-                    drive.StasusId = reader.GetInt32(reader.GetOrdinal("StatusId"));
-                    drive.DriverId = reader.GetInt32(reader.GetOrdinal("driverid"));
-                    drive.RequestId = reader.GetInt32(reader.GetOrdinal("requestid"));
-                    drives.Add(drive);
-                    dataTable.Rows.Add(drive.DriverId,drive.StasusId, drive.DriverId, drive.RequestId);
+                    using (SqlConnection connection = new SqlConnection(_db.connectionString))
+                    {
+                        connection.Open();
+                        string query =
+                            $"delete from [Request] where Id = {((Request)RequestDataGrid.SelectedItem).Id}";
+                        using (SqlCommand command = new SqlCommand(query, connection))
+                        {
+                            command.ExecuteNonQuery();
+                        }
+
+                        connection.Close();
+                    }
+
+                    MessageBox.Show("Заявка удалена!");
+                    _db = new DB();
+                    UpdateGrid();
                 }
             }
-            OrdersDataGrid.ItemsSource = dataTable.DefaultView;
-            OrdersDataGrid.ItemsSource = drives;
-            connection.Close();
+            else
+                MessageBox.Show("Сначала выберите строку в таблице!");
         }
 
-        private void Back_button_Click(object sender, RoutedEventArgs e)
+        private void EditButton_OnClick(object sender, RoutedEventArgs e)
         {
-
+            if (RequestDataGrid.SelectedItem != null)
+            {
+                NavigationService.Navigate(new EditRequest((Request)RequestDataGrid.SelectedItem, _operator));
+            }
+            else
+                MessageBox.Show("Сначала выберите строку в таблице!");
         }
 
-        private void OrdersDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void OperatorMain_OnLoaded(object sender, RoutedEventArgs e)
         {
-
+            _db = new DB();
         }
 
-        private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void FilterComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
-        }
-
-        private void Add_Driver_OrderButton_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Add_Driver_Foe_Order());
+            UpdateGrid();
         }
     }
 }

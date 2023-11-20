@@ -5,27 +5,27 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:Taxi"
       mc:Ignorable="d"
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="auto" d:DesignWidth="auto"
       Title="Авторизация">
 
     <Grid>
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Vertical">
-            <TextBlock Style="{StaticResource DefaultTextBlock}" HorizontalAlignment="Center">
-                <Hyperlink NavigateUri="RegPage.xaml">Зарегистрироваться</Hyperlink>
+            <TextBlock Style="{StaticResource DefaultTextBlock}" HorizontalAlignment="Center" Margin="10">
+                <Hyperlink NavigateUri="Reg.xaml">Зарегистрироваться</Hyperlink>
             </TextBlock>
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal" Margin="10">
                 <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Логин" Style="{StaticResource DefaultTextBlock}" />
-                    <TextBlock Text="Пароль" Style="{StaticResource DefaultTextBlock}" />
+                    <TextBlock Text="Логин" Style="{StaticResource DefaultTextBlock}" Margin="5" FontSize="16"/>
+                    <TextBlock Text="Пароль" Style="{StaticResource DefaultTextBlock}" Margin="5,5,7,5"/>
                 </StackPanel>
                 <StackPanel>
-                    <TextBox Style="{StaticResource DefaultTextBox}" Name="LoginTextBox" />
-                    <TextBox Style="{StaticResource DefaultTextBox}" Name="PasswordTextBox" />
+                    <TextBox Style="{StaticResource DefaultTextBox}" Name="LoginTextBox" Margin="5"/>
+                    <TextBox Style="{StaticResource DefaultTextBox}" Name="PasswordTextBox" Margin="5"/>
                 </StackPanel>
             </StackPanel>
-            <Button x:Name="LoginButton" Style="{StaticResource DefaultButton}" Content="Войти как пользователь" Click="LoginButton_Click"/>
-            <Button x:Name="LoginTaxi_Button" Style="{StaticResource DefaultButton}" Content="Войти как таксист" Click="LoginTaxi_Button_Click"/>
-            <Button x:Name="LoginOperator_Button" Style="{StaticResource DefaultButton}" Content="Войти как оператор" Click="LoginOperator_Button_Click"/>
+            <Button x:Name="LoginButton" Style="{StaticResource DefaultButton}" Width="200" Content="Войти как пользователь" Click="LoginButton_Click"/>
+            <Button x:Name="LoginTaxi_Button" Style="{StaticResource DefaultButton}" Width="200" Content="Войти как таксист" Click="LoginTaxi_Button_Click"/>
+            <Button x:Name="LoginOperator_Button" Style="{StaticResource DefaultButton}" Width="200" Content="Войти как оператор" Click="LoginOperator_Button_Click"/>
         </StackPanel>
     </Grid>
 </Page>

@@ -5,38 +5,39 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Taxi"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="UserMain">
+      d:DesignHeight="auto" d:DesignWidth="auto"
+      Loaded="UserMain_OnLoaded"
+      Title="Мои вызовы">
 
     <Grid>
-        <Grid>
-            <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="3*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="2.2*"/>
-            <RowDefinition Height="4*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="0.7*"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Top">
-            <StackPanel Orientation="Horizontal">
-                    <TextBlock FontSize="20" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Stretch" >Клиент</TextBlock>
-                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="30">
-                    <Button Margin="400,0,0,0" Width="80" Height="40" Content="Назад" Name="Back_button" Click="Back_button_Click_1" />
-                    </StackPanel>
+
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Style="{StaticResource DefaultTextBlock}" Text="Поиск: " VerticalAlignment="Center"/>
+            <TextBox x:Name="SearchTextBox" Style="{StaticResource DefaultTextBox}" VerticalAlignment="Center" TextChanged="SearchTextBox_OnTextChanged" />
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="3">
+                <RadioButton x:Name="LeastToMost" Checked="LeastToMost_OnChecked" Margin="2" Content="От меньшего к большему" />
+                <RadioButton x:Name="MostToLeast" Checked="MostToLeast_OnChecked" Margin="2" Content="От большего к меньшему" />
             </StackPanel>
         </StackPanel>
-        <DataGrid Grid.Row="1" Grid.ColumnSpan="3" CanUserAddRows="False" IsReadOnly="True"  x:Name="OrdersDataGrid" SelectionChanged="OrdersDataGrid_SelectionChanged" />
-        <StackPanel Grid.Row="2" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Margin="5" Height="35" Width="130" Content="Сделать заказ" x:Name="AddOrderButton" Click="AddOrderButton_Click"/>
+        <DataGrid Grid.Row="1" x:Name="RequestDataGrid" Height="250" Margin="10" AutoGenerateColumns="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Номер" Binding="{Binding Id}" />
+                <DataGridTextColumn Header="Откуда" Binding="{Binding AddressFrom}" />
+                <DataGridTextColumn Header="Куда" Binding="{Binding AddressWhere}"/>
+                <DataGridTextColumn Header="Диспетчер" Binding="{Binding Operator.Fullname}" MinWidth="200" />
+                <DataGridTextColumn Header="Дата" Binding="{Binding Date}" MinWidth="200" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <StackPanel Grid.Row="2" Orientation="Vertical">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button x:Name="AddRequestButton" Click="AddRequestButton_OnClick" Style="{StaticResource DefaultButton}" Width="150" Content="Вызвать такси" />
             </StackPanel>
-        <StackPanel Grid.Row="3" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Center">
-            <TextBlock FontSize="20" VerticalAlignment="Center" Margin="10">Поиск</TextBlock>
-            <TextBox x:Name="SearchTextBox" Height="25" Width="250" Margin="10" TextChanged="SearchTextBox_TextChanged"></TextBox>
         </StackPanel>
-    </Grid> 
     </Grid>
 </Page>

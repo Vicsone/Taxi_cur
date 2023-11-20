@@ -24,59 +24,64 @@ namespace Taxi
     /// </summary>
     public partial class UserMain : Page
     {
-        SqlConnection connection = new SqlConnection();
-        List<Request> requests;
-        DataTable dataTable;
+        private DB _db = new DB();
 
-        public UserMain()
+        public UserMain(User client)
         {
             InitializeComponent();
-            requests = new List<Request>();
-            dataTable = new DataTable();
-            dataTable.Columns.Add("AddressFrom", typeof(string));
-            dataTable.Columns.Add("AddressWhere", typeof(string));
-            dataTable.Columns.Add("ClientId", typeof(int));
-            string connectionString = @"Data Source=DESKTOP-R1EIB3B\SQLEXPRESS;Initial Catalog=Taxi;Integrated Security=True";
-            string sqlExpression = "SELECT * FROM Request";
-            connection = new SqlConnection(connectionString);
-            connection.Open();
-            SqlCommand sqlCommand = new SqlCommand(sqlExpression, connection);
-            SqlDataReader reader = sqlCommand.ExecuteReader();
-            if (reader.HasRows)
+            _client = client;
+            LeastToMost.IsChecked = true;
+        }
+
+        private User _client;
+
+        private void LeastToMost_OnChecked(object sender, RoutedEventArgs e)
+        {
+            UpdateGrid();
+        }
+
+        private void MostToLeast_OnChecked(object sender, RoutedEventArgs e)
+        {
+            UpdateGrid();
+        }
+
+        private void AddRequestButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new Add_Order(_client));
+        }
+
+        private void SearchTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateGrid();
+        }
+
+        private void UpdateGrid()
+        {
+            List<Request> requests = _db.Requests.Where(c => c.ClientId == _client.Id).ToList();
+            if (LeastToMost == null) return;
+            
+            if (requests.Count != 0)
             {
-                while (reader.Read())
+                if (LeastToMost.IsChecked == true)
                 {
-                    Request request = new Request();
-                    request.startpos = reader.GetString(reader.GetOrdinal("addressfrom"));
-                    request.nextpos = reader.GetString(reader.GetOrdinal("addresswhere"));
-                    request.client_id = reader.GetInt32(reader.GetOrdinal("clientid"));
-                    requests.Add(request);
-                    dataTable.Rows.Add(request.startpos, request.nextpos, request.client_id);
+                    RequestDataGrid.ItemsSource = requests.Where(c =>
+                            c.AddressFrom.ToLower().Contains(SearchTextBox.Text.ToLower()) || c.AddressWhere.ToLower().Contains(SearchTextBox.Text.ToLower()))
+                        .OrderBy(c => c.Date).ToList();
+                }
+                else
+                {
+                    RequestDataGrid.ItemsSource =
+                        requests.Where(c =>
+                                c.AddressFrom.ToLower().Contains(SearchTextBox.Text.ToLower()) ||
+                                c.AddressWhere.ToLower().Contains(SearchTextBox.Text.ToLower()))
+                            .OrderByDescending(c => c.Date).ToList();
                 }
             }
-            OrdersDataGrid.ItemsSource = dataTable.DefaultView;
-            OrdersDataGrid.ItemsSource = requests;
-            connection.Close();
         }
 
-        private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void UserMain_OnLoaded(object sender, RoutedEventArgs e)
         {
-
-        }
-
-        private void Back_button_Click_1(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Auth());
-        }
-
-        private void AddOrderButton_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Add_Order());
-        }
-
-        private void OrdersDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
+            _db = new DB();
         }
     }
 }

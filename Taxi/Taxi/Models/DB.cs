@@ -10,8 +10,11 @@ namespace Taxi
         {
             Users = GetUsers();
             Drivers = GetDrivers();
+            Operators = GetOperators();
+            Clients = GetClients();
             StatusList = GetStatusList();
-            // Requests = GetRequests();
+            Requests = GetRequests();
+            Drives = GetDrives();
         }
 
         public static DB _dB = new DB();
@@ -59,7 +62,7 @@ namespace Taxi
 
             return list;
         }
-        
+
         private List<Driver> GetDrivers()
         {
             List<Driver> list = new List<Driver>();
@@ -77,7 +80,7 @@ namespace Taxi
                             Id = Convert.ToInt32(reader["Id"]),
                             Experience = Convert.ToInt32(reader["Experience"]),
                             Rating = Convert.ToDecimal(reader["Rating"]),
-                            User = Users.Find(c=>c.Id == Convert.ToInt32(reader["Id"]))
+                            User = Users.Find(c => c.Id == Convert.ToInt32(reader["Id"]))
                         };
                         list.Add(item);
                     }
@@ -90,76 +93,134 @@ namespace Taxi
 
             return list;
         }
-        
 
-        // private List<Request> GetRequests()
-        // {
-        //     List<Request> list = new List<Request>();
-        //     using (SqlConnection connection = new SqlConnection(connectionString))
-        //     {
-        //         connection.Open();
-        //         string query = $"select * from [Request]";
-        //         using (SqlCommand command = new SqlCommand(query, connection))
-        //         {
-        //             SqlDataReader reader = command.ExecuteReader();
-        //             while (reader.Read())
-        //             {
-        //                 Request item = new Request();
-        //                 item.Id = Convert.ToInt32(reader["Id"]);
-        //                 item.Address = reader["Address"].ToString()!;
-        //                 item.StatusId = Convert.ToInt32(reader["StatusId"]);
-        //                 item.ClientId = Convert.ToInt32(reader["ClientId"]);
-        //                 if (reader["EmployeeId"] != DBNull.Value)
-        //                 {
-        //                     item.EmployeeId = Convert.ToInt32(reader["EmployeeId"]);
-        //                     item.Employee = Users.Find(c => c.Id == Convert.ToInt32(reader["EmployeeId"]));
-        //                 }
-        //
-        //                 item.Status = StatusList.Find(c => c.Id == Convert.ToInt32(reader["StatusId"]))!;
-        //                 item.Client = Users.Find(c => c.Id == Convert.ToInt32(reader["ClientId"]))!;
-        //                 list.Add(item);
-        //             }
-        //
-        //             reader.Close();
-        //         }
-        //
-        //         connection.Close();
-        //     }
-        //
-        //     return list;
-        // }
+        private List<Client> GetClients()
+        {
+            List<Client> list = new List<Client>();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = $"select * from [Client]";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Client item = new Client()
+                        {
+                            Id = Convert.ToInt32(reader["Id"]),
+                            User = Users.Find(c => c.Id == Convert.ToInt32(reader["Id"]))
+                        };
+                        list.Add(item);
+                    }
 
-        // private List<RequestService> GetRequestServices()
-        // {
-        //     List<RequestService> list = new List<RequestService>();
-        //     using (SqlConnection connection = new SqlConnection(connectionString))
-        //     {
-        //         connection.Open();
-        //         string query = $"select * from [RequestService]";
-        //         using (SqlCommand command = new SqlCommand(query, connection))
-        //         {
-        //             SqlDataReader reader = command.ExecuteReader();
-        //             while (reader.Read())
-        //             {
-        //                 RequestService item = new RequestService()
-        //                 {
-        //                     Id = Convert.ToInt32(reader["Id"]),
-        //                     RequestId = Convert.ToInt32(reader["RequestId"]),
-        //                     ServiceId = Convert.ToInt32(reader["ServiceId"]),
-        //                     Request = Requests.Find(c => c.Id == Convert.ToInt32(reader["RequestId"]))!,
-        //                     Service = Services.Find(c => c.Id == Convert.ToInt32(reader["ServiceId"]))!
-        //                 };
-        //                 list.Add(item);
-        //             }
-        //
-        //             reader.Close();
-        //         }
-        //
-        //         connection.Close();
-        //     }
-        //
-        //     return list;
-        // }
+                    reader.Close();
+                }
+
+                connection.Close();
+            }
+
+            return list;
+        }
+
+        private List<Operator> GetOperators()
+        {
+            List<Operator> list = new List<Operator>();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = $"select * from [Operator]";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Operator item = new Operator()
+                        {
+                            Id = Convert.ToInt32(reader["Id"]),
+                            User = Users.Find(c => c.Id == Convert.ToInt32(reader["Id"]))
+                        };
+                        list.Add(item);
+                    }
+
+                    reader.Close();
+                }
+
+                connection.Close();
+            }
+
+            return list;
+        }
+
+        private List<Request> GetRequests()
+        {
+            List<Request> list = new List<Request>();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = $"select * from [Request]";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Request item = new Request();
+                        item.Id = Convert.ToInt32(reader["Id"]);
+                        item.AddressFrom = reader["AddressFrom"].ToString()!;
+                        item.AddressWhere = reader["AddressWhere"].ToString()!;
+                        item.ClientId = Convert.ToInt32(reader["ClientId"]);
+                        item.Client = Users.Find(c => c.Id == Convert.ToInt32(reader["ClientId"]))!;
+                        if (reader["OperatorId"] != DBNull.Value)
+                        {
+                            item.OperatorId = Convert.ToInt32(reader["OperatorId"]);
+                            item.Operator = Users.Find(c => c.Id == Convert.ToInt32(reader["OperatorId"]));
+                        }
+
+                        item.Date = Convert.ToDateTime(reader["Date"]);
+                        list.Add(item);
+                    }
+
+                    reader.Close();
+                }
+
+                connection.Close();
+            }
+
+            return list;
+        }
+
+        private List<Drive> GetDrives()
+        {
+            List<Drive> list = new List<Drive>();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = $"select * from [Drive]";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Drive item = new Drive();
+                        item.Id = Convert.ToInt32(reader["Id"]);
+                        item.DriverId = Convert.ToInt32(reader["DriverId"]);
+                        item.RequestId = Convert.ToInt32(reader["RequestId"]);
+                        item.StatusId = Convert.ToInt32(reader["StatusId"]);
+                        item.Driver = Users.Find(c => c.Id == Convert.ToInt32(reader["DriverId"]));
+                        item.Request = Requests.Find(c => c.Id == Convert.ToInt32(reader["RequestId"]));
+                        item.Status = StatusList.Find(c => c.Id == Convert.ToInt32(reader["StatusId"]));
+                        
+                        list.Add(item);
+                    }
+
+                    reader.Close();
+                }
+
+                connection.Close();
+            }
+
+            return list;
+        }
 
         private List<Status> GetStatusList()
         {

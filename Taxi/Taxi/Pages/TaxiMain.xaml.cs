@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Taxi.Pages;
 
 namespace Taxi
 {
@@ -20,25 +21,71 @@ namespace Taxi
     /// </summary>
     public partial class TaxiMain : Page
     {
-        public TaxiMain()
+        private DB _db = new DB();
+
+        public TaxiMain(User driver)
         {
             InitializeComponent();
-
+            _driver = driver;
+            LeastToMost.IsChecked = true;
         }
 
-        private void Back_button_Click(object sender, RoutedEventArgs e)
+        private User _driver;
+
+        private void MostToLeast_OnChecked(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new Auth());
+            UpdateGrid();
         }
 
-        private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void LeastToMost_OnChecked(object sender, RoutedEventArgs e)
         {
-
+            UpdateGrid();
         }
 
-        private void EndOrderButton_Click(object sender, RoutedEventArgs e)
+        private void EditDriveButton_OnClick(object sender, RoutedEventArgs e)
         {
+            if (RequestDataGrid.SelectedItem != null)
+            {
+                NavigationService.Navigate(new EditDrive((Drive)RequestDataGrid.SelectedItem));
+            }
+            else
+                MessageBox.Show("Сначала выберите строку в таблице!");
+        }
 
+        private void SearchTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateGrid();
+        }
+
+        private void UpdateGrid()
+        {
+            List<Drive> drives = _db.Drives.Where(c => c.Driver.Id == _driver.Id).ToList();
+            if (LeastToMost == null) return;
+
+            if (drives.Count != 0)
+            {
+                if (LeastToMost.IsChecked == true)
+                {
+                    RequestDataGrid.ItemsSource = drives.Where(c =>
+                            c.Request.AddressFrom.ToLower().Contains(SearchTextBox.Text.ToLower()) ||
+                            c.Request.AddressWhere.ToLower().Contains(SearchTextBox.Text.ToLower()))
+                        .OrderBy(c => c.Request.Date).ToList();
+                }
+
+                else
+                {
+                    RequestDataGrid.ItemsSource =
+                        drives.Where(c =>
+                                c.Request.AddressFrom.ToLower().Contains(SearchTextBox.Text.ToLower()) ||
+                                c.Request.AddressWhere.ToLower().Contains(SearchTextBox.Text.ToLower()))
+                            .OrderByDescending(c => c.Request.Date).ToList();
+                }
+            }
+        }
+
+        private void TaxiMain_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            _db = new DB();
         }
     }
 }

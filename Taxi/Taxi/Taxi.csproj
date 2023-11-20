@@ -14,6 +14,7 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -67,20 +68,23 @@
     <Compile Include="Models\Request.cs" />
     <Compile Include="Models\Status.cs" />
     <Compile Include="Models\User.cs" />
-    <Compile Include="Pages\Add_Driver_Foe_Order.xaml.cs">
-      <DependentUpon>Add_Driver_Foe_Order.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Pages\Add_Order.xaml.cs">
       <DependentUpon>Add_Order.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Change_Order.xaml.cs">
-      <DependentUpon>Change_Order.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Auth.xaml.cs">
       <DependentUpon>Auth.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\EditDrive.xaml.cs">
+      <DependentUpon>EditDrive.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\EditRequest.xaml.cs">
+      <DependentUpon>EditRequest.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\OperatorMain.xaml.cs">
       <DependentUpon>OperatorMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Reg.xaml.cs">
+      <DependentUpon>Reg.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\TaxiMain.xaml.cs">
       <DependentUpon>TaxiMain.xaml</DependentUpon>
@@ -93,15 +97,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Pages\Add_Driver_Foe_Order.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Pages\Add_Order.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\Change_Order.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -109,10 +105,13 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\EditDrive.xaml" />
+    <Page Include="Pages\EditRequest.xaml" />
     <Page Include="Pages\OperatorMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\Reg.xaml" />
     <Page Include="Pages\TaxiMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
