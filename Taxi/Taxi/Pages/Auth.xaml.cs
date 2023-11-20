@@ -24,6 +24,7 @@ namespace Taxi
         public Auth()
         {
             InitializeComponent();
+            int d = 2;
         }
 
         private readonly DB _db = new DB();
