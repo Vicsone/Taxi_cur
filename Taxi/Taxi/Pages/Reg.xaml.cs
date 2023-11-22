@@ -3,6 +3,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Taxi.Pages;
 
@@ -17,7 +18,7 @@ public partial class Reg : Page
     {
         if (FirstNameTextBox.Text != String.Empty && MiddleNameTextBox.Text != String.Empty &&
             LastNameTextBox.Text != String.Empty &&
-            PhoneTextBox.Text != String.Empty && LoginTextBox.Text != String.Empty &&
+            PhoneTextBox.IsMaskCompleted && LoginTextBox.Text != String.Empty &&
             PasswordTextBox.Text != String.Empty)
         {
             User user = DB.entities.Users.FirstOrDefault(c => c.Login == LoginTextBox.Text);
@@ -71,4 +72,9 @@ public partial class Reg : Page
             MessageBox.Show("Поля не могут быть пустыми!", "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
+
+    private void TextBox_OnPreviewTextInput(object sender, TextCompositionEventArgs e) =>
+        e.Handled = "1234567890 ,!@#$%^&*()_+={}[]|/".IndexOf(e.Text) > 0;
+
+    private void TextBox_OnPreviewKeyDown(object sender, KeyEventArgs e) => e.Handled = e.Key == Key.Space;
 }

@@ -3,6 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:kit="http://schemas.xceed.com/wpf/xaml/toolkit"
       xmlns:local="clr-namespace:Taxi.Pages"
       mc:Ignorable="d"
       Title="Регистрация" Height="auto" Width="auto">
@@ -10,23 +11,32 @@
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
             <StackPanel Orientation="Horizontal">
                 <StackPanel Orientation="Vertical">
-                    <TextBlock FontSize="16" Margin="5" >Имя</TextBlock>
-                    <TextBlock FontSize="16" Margin="5">Фамилия</TextBlock>
-                    <TextBlock FontSize="16" Margin="5">Отчество</TextBlock>
-                    <TextBlock FontSize="16" Margin="5">Телефон</TextBlock>
-                    <TextBlock FontSize="16" Margin="5">Логин</TextBlock>
-                    <TextBlock FontSize="16" Margin="5">Пароль</TextBlock>
+                    <TextBlock Text="Имя" FontSize="16" Margin="5" />
+                    <TextBlock Text="Фамилия" FontSize="16" Margin="5" />
+                    <TextBlock Text="Отчество" FontSize="16" Margin="5" />
+                    <TextBlock Text="Телефон" FontSize="16" Margin="5" />
+                    <TextBlock Text="Логин" FontSize="16" Margin="5" />
+                    <TextBlock Text="Пароль" FontSize="16" Margin="5" />
                 </StackPanel>
                 <StackPanel Orientation="Vertical">
-                    <TextBox Margin="6" Width="140" Name="FirstNameTextBox" Height="20"></TextBox>
-                    <TextBox Margin="6" Width="140" Name="MiddleNameTextBox" Height="20"></TextBox>
-                    <TextBox Margin="6" Width="140" Name="LastNameTextBox" Height="20"></TextBox>
-                    <TextBox Margin="6" Width="140" Name="PhoneTextBox" Height="20"></TextBox>
-                    <TextBox Margin="5" Width="140" Name="LoginTextBox" Height="20"></TextBox>
-                    <TextBox Margin="5" Width="140" Name="PasswordTextBox" Height="20"></TextBox>
+                    <TextBox Margin="6" Width="140" Name="FirstNameTextBox"
+                             PreviewTextInput="TextBox_OnPreviewTextInput" Height="20"
+                             PreviewKeyDown="TextBox_OnPreviewKeyDown" />
+                    <TextBox Margin="6" Width="140" Name="MiddleNameTextBox"
+                             PreviewTextInput="TextBox_OnPreviewTextInput" Height="20"
+                             PreviewKeyDown="TextBox_OnPreviewKeyDown" />
+                    <TextBox Margin="6" Width="140" Name="LastNameTextBox"
+                             PreviewTextInput="TextBox_OnPreviewTextInput" Height="20"
+                             PreviewKeyDown="TextBox_OnPreviewKeyDown" />
+                    <kit:MaskedTextBox Margin="5" Name="PhoneTextBox" Width="70" HorizontalAlignment="Left" Height="20"
+                                       Mask="00000000000" />
+                    <TextBox Margin="5" Width="140" Name="LoginTextBox" Height="20"
+                             PreviewKeyDown="TextBox_OnPreviewKeyDown" />
+                    <TextBox Margin="5" Width="140" Name="PasswordTextBox" Height="20"
+                             PreviewKeyDown="TextBox_OnPreviewKeyDown" />
                 </StackPanel>
             </StackPanel>
-            <Button Name="RegButton" Height="30" Width="120" Click="RegButton_OnClick" Content="Зарегистрироваться" Margin="10" ></Button>
+            <Button Height="30" Width="120" Click="RegButton_OnClick" Content="Зарегистрироваться" Margin="10" />
         </StackPanel>
     </Grid>
 </Page>

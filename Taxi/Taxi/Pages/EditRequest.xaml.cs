@@ -12,17 +12,16 @@ public partial class EditRequest : Page
         InitializeComponent();
         DataContext = request;
         _operator = operatorr;
-        DriverComboBox.ItemsSource = _taxiDb.Drivers;
+        DriverComboBox.ItemsSource = DB.entities.Drivers;
     }
 
-    private TaxiDB _taxiDb = new TaxiDB();
     User _operator;
-    
+
     private void SaveButton_OnClick(object sender, RoutedEventArgs e)
     {
         if (DriverComboBox.SelectedItem != null)
         {
-            using (SqlConnection connection = new SqlConnection(_taxiDb.connectionString))
+            using (SqlConnection connection = new SqlConnection(DB.entities.connectionString))
             {
                 connection.Open();
                 string query =
@@ -34,8 +33,8 @@ public partial class EditRequest : Page
 
                 connection.Close();
             }
-            
-            using (SqlConnection connection = new SqlConnection(_taxiDb.connectionString))
+
+            using (SqlConnection connection = new SqlConnection(DB.entities.connectionString))
             {
                 connection.Open();
                 string query = $"insert into [Drive] values (@StatusId,@DriverId,@RequestId)";
@@ -50,7 +49,7 @@ public partial class EditRequest : Page
 
                 connection.Close();
             }
-            
+
             MessageBox.Show("Сохранения изменены!");
             NavigationService.GoBack();
         }

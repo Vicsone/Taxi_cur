@@ -22,45 +22,37 @@ namespace Taxi
     /// </summary>
     public partial class TaxiMain : Page
     {
-        private TaxiDB _taxiDb = new TaxiDB();
-
-        public TaxiMain(User driver)
+        public TaxiMain(Driver driver)
         {
             InitializeComponent();
             _driver = driver;
             LeastToMost.IsChecked = true;
         }
 
-        private User _driver;
+        private Driver _driver;
 
-        private void MostToLeast_OnChecked(object sender, RoutedEventArgs e)
-        {
-            UpdateGrid();
-        }
+        private void MostToLeast_OnChecked(object sender, RoutedEventArgs e) => UpdateGrid();
 
-        private void LeastToMost_OnChecked(object sender, RoutedEventArgs e)
-        {
-            UpdateGrid();
-        }
+        private void LeastToMost_OnChecked(object sender, RoutedEventArgs e) => UpdateGrid();
 
         private void EditDriveButton_OnClick(object sender, RoutedEventArgs e)
         {
             if (RequestDataGrid.SelectedItem != null)
             {
-                NavigationService.Navigate(new EditDrive((Drive)RequestDataGrid.SelectedItem));
+                if (((Drive)RequestDataGrid.SelectedItem).Status.Name == "Завершена")
+                    MessageBox.Show("Эта поездка завершена!");
+                else
+                    NavigationService.Navigate(new EditDrive((Drive)RequestDataGrid.SelectedItem));
             }
             else
                 MessageBox.Show("Сначала выберите строку в таблице!");
         }
 
-        private void SearchTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
-        {
-            UpdateGrid();
-        }
+        private void SearchTextBox_OnTextChanged(object sender, TextChangedEventArgs e) => UpdateGrid();
 
         private void UpdateGrid()
         {
-            List<Drive> drives = _taxiDb.Drives.Where(c => c.Driver.Id == _driver.Id).ToList();
+            List<Drive> drives = DB.entities.Drives.Where(c => c.Driver.Id == _driver.Id).ToList();
             if (LeastToMost == null) return;
 
             if (drives.Count != 0)
@@ -84,9 +76,7 @@ namespace Taxi
             }
         }
 
-        private void TaxiMain_OnLoaded(object sender, RoutedEventArgs e)
-        {
-            _taxiDb = new TaxiDB();
-        }
+        private void TaxiMain_OnLoaded(object sender, RoutedEventArgs e) =>
+            RequestDataGrid.ItemsSource = DB.entities.Drives;
     }
 }

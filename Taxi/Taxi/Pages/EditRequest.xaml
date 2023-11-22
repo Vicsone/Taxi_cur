@@ -13,12 +13,14 @@
                     <TextBlock Text="Откуда:" Style="{StaticResource DefaultTextBlock}" />
                     <TextBlock Text="Куда:" Style="{StaticResource DefaultTextBlock}" />
                     <TextBlock Text="Клиент:" Style="{StaticResource DefaultTextBlock}" />
-                    <TextBlock Text="Время:" Style="{StaticResource DefaultTextBlock}" />
+                    <TextBlock Text="Номер клиента:" Style="{StaticResource DefaultTextBlock}" />
+                    <TextBlock Text="Дата и время:" Style="{StaticResource DefaultTextBlock}" />
                 </StackPanel>
                 <StackPanel Orientation="Vertical">
                     <TextBlock Text="{Binding AddressFrom}" Style="{StaticResource DefaultTextBlock}" />
                     <TextBlock Text="{Binding AddressWhere}" Style="{StaticResource DefaultTextBlock}" />
                     <TextBlock Text="{Binding Client.Fullname}" Style="{StaticResource DefaultTextBlock}" />
+                    <TextBlock Text="{Binding Client.Phone}" Style="{StaticResource DefaultTextBlock}" />
                     <TextBlock Text="{Binding Date}" Style="{StaticResource DefaultTextBlock}" />
                 </StackPanel>
             </StackPanel>

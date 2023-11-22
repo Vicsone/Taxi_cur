@@ -12,14 +12,12 @@ public partial class EditDrive : Page
         InitializeComponent();
 
         DataContext = drive;
-        StatusComboBox.ItemsSource = _taxiDb.StatusList;
+        StatusComboBox.ItemsSource = DB.entities.StatusList;
     }
-
-    private TaxiDB _taxiDb = new TaxiDB();
 
     private void SaveButton_OnClick(object sender, RoutedEventArgs e)
     {
-        using (SqlConnection connection = new SqlConnection(_taxiDb.connectionString))
+        using (SqlConnection connection = new SqlConnection(DB.entities.connectionString))
         {
             connection.Open();
             string query =

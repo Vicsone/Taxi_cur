@@ -28,15 +28,12 @@ namespace Taxi
         {
             InitializeComponent();
             _operator = operatorr;
-            
+
             RequestFilterComboBox.SelectedIndex = 0;
             TaxiFilterComboBox.SelectedIndex = 0;
 
             RequestLeastToMost.IsChecked = true;
             TaxiLeastToMost.IsChecked = true;
-            
-            UpdateRequestGrid();
-            UpdateTaxiGrid();
         }
 
         private User _operator;
@@ -45,7 +42,6 @@ namespace Taxi
         private void UpdateRequestGrid()
         {
             List<Request> requests = DB.entities.Requests;
-            // if (RequestFilterComboBox == null || RequestLeastToMost == null) return;
 
             if (RequestFilterComboBox.SelectedIndex == 0)
             {
@@ -90,7 +86,6 @@ namespace Taxi
         private void UpdateTaxiGrid()
         {
             List<Drive> drives = DB.entities.Drives;
-            // if (TaxiFilterComboBox == null || TaxiLeastToMost == null) return;
 
             if (RequestFilterComboBox.SelectedIndex == 0)
             {
@@ -166,9 +161,14 @@ namespace Taxi
         {
             if (RequestDataGrid.SelectedItem != null)
             {
-                NavigationService.Navigate(new EditRequest((Request)RequestDataGrid.SelectedItem, _operator));
-                DB.entities.UpdateAll();
-                UpdateRequestGrid();
+                if (DB.entities.Drives.Find(c => c.Request == (Request)RequestDataGrid.SelectedItem) != null)
+                    MessageBox.Show("Этой заявке уже назначен водитель.");
+                else
+                {
+                    NavigationService.Navigate(new EditRequest((Request)RequestDataGrid.SelectedItem, _operator));
+                    DB.entities.UpdateAll();
+                    UpdateRequestGrid();
+                }
             }
             else
                 MessageBox.Show("Сначала выберите строку в таблице!");
@@ -192,5 +192,11 @@ namespace Taxi
             UpdateRequestGrid();
 
         private void RequestLeastToMost_OnChecked(object sender, RoutedEventArgs e) => UpdateRequestGrid();
+
+        private void OperatorMain_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            RequestDataGrid.ItemsSource = DB.entities.Requests;
+            TaxiDataGrid.ItemsSource = DB.entities.Drives;
+        }
     }
 }

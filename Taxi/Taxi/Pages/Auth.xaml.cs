@@ -44,7 +44,7 @@ namespace Taxi
             }
             else
             {
-                MessageBox.Show("Логин или пароль не может быть пустым", "Error!", MessageBoxButton.OK,
+                MessageBox.Show("Логин и пароль не могут быть пустыми", "Error!", MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
         }
@@ -56,9 +56,7 @@ namespace Taxi
                 Driver driver = DB.entities.Drivers.FirstOrDefault(c =>
                     c.User.Login == LoginTextBox.Text && c.User.Password == PasswordTextBox.Text);
                 if (driver != null)
-                {
-                    NavigationService.Navigate(new TaxiMain(driver.User));
-                }
+                    NavigationService.Navigate(new TaxiMain(driver));
                 else
                 {
                     MessageBox.Show("Водитель с такими данными не найден!", "Error!", MessageBoxButton.OK,
@@ -67,7 +65,7 @@ namespace Taxi
             }
             else
             {
-                MessageBox.Show("Логин или пароль не может быть пустым", "Error!", MessageBoxButton.OK,
+                MessageBox.Show("Логин и пароль не могут быть пустыми", "Error!", MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
         }
@@ -90,7 +88,7 @@ namespace Taxi
             }
             else
             {
-                MessageBox.Show("Логин или пароль не может быть пустым", "Error!", MessageBoxButton.OK,
+                MessageBox.Show("Логин и пароль не могут быть пустыми", "Error!", MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
         }
